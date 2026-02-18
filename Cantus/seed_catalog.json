@@ -1,0 +1,1703 @@
+{
+  "locations": [
+    {
+      "name": "Forest",
+      "sortOrder": null
+    },
+    {
+      "name": "Desert",
+      "sortOrder": null
+    },
+    {
+      "name": "Urban",
+      "sortOrder": null
+    },
+    {
+      "name": "Swamp",
+      "sortOrder": null
+    },
+    {
+      "name": "Mountain",
+      "sortOrder": null
+    },
+    {
+      "name": "Coastal",
+      "sortOrder": null
+    },
+    {
+      "name": "Underdark",
+      "sortOrder": null
+    },
+    {
+      "name": "Arctic",
+      "sortOrder": null
+    }
+  ],
+  "moods": [
+    {
+      "name": "Cozy",
+      "sortOrder": null
+    },
+    {
+      "name": "Curious",
+      "sortOrder": null
+    },
+    {
+      "name": "Investigative",
+      "sortOrder": null
+    },
+    {
+      "name": "Lighthearted",
+      "sortOrder": null
+    },
+    {
+      "name": "Mysterious",
+      "sortOrder": null
+    },
+    {
+      "name": "Ominous",
+      "sortOrder": null
+    },
+    {
+      "name": "Suspenseful",
+      "sortOrder": null
+    }
+  ],
+  "musicThemes": [
+    {
+      "name": "Mystery / Investigation",
+      "sortOrder": null
+    },
+    {
+      "name": "Noir / Crime",
+      "sortOrder": null
+    }
+  ],
+  "atmosphereThemes": [
+    {
+      "name": "Festival / Carnival",
+      "sortOrder": null
+    },
+    {
+      "name": "Investigation / Crime Scene",
+      "sortOrder": null
+    },
+    {
+      "name": "Sacred / Divine Presence",
+      "sortOrder": null
+    },
+    {
+      "name": "Haunting / Paranormal",
+      "sortOrder": null
+    },
+    {
+      "name": "Dreamscape / Surreal",
+      "sortOrder": null
+    },
+    {
+      "name": "Frontier Outpost",
+      "sortOrder": null
+    }
+  ],
+  "sfxThemes": [
+    {
+      "name": "Combat Impacts",
+      "sortOrder": null
+    },
+    {
+      "name": "Doors & Mechanisms",
+      "sortOrder": null
+    },
+    {
+      "name": "Magic",
+      "sortOrder": null
+    },
+    {
+      "name": "Footsteps",
+      "sortOrder": null
+    },
+    {
+      "name": "Water Interactions",
+      "sortOrder": null
+    },
+    {
+      "name": "Fire & Heat",
+      "sortOrder": null
+    },
+    {
+      "name": "Horror Stingers",
+      "sortOrder": null
+    },
+    {
+      "name": "Monsters & Beasts",
+      "sortOrder": null
+    }
+  ],
+  "creatureTypes": [
+    {
+      "name": "Undead",
+      "sortOrder": null
+    },
+    {
+      "name": "Beast",
+      "sortOrder": null
+    },
+    {
+      "name": "Dragon",
+      "sortOrder": null
+    },
+    {
+      "name": "Fey",
+      "sortOrder": null
+    }
+  ],
+  "libraryItems": [
+    {
+      "id": "2E9C40F5-0F8F-4A45-9E8E-57A77C9F2F27",
+      "kind": "music",
+      "title": "D&D Stealth",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "F5A81D1B-C3C1-405D-B953-57DBA5FA2C1C",
+      "kind": "atmosphere",
+      "title": "Atmosphere 01",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "1C8987BF-59EF-4EA9-9494-7EFAE5AEB98E",
+      "kind": "atmosphere",
+      "title": "Atmosphere 02",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "9F50EE60-4EF7-4E50-90B2-FC3BA2C5358E",
+      "kind": "atmosphere",
+      "title": "Atmosphere 03",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "1094955B-0B55-44A3-9CE5-625112FB9BFC",
+      "kind": "atmosphere",
+      "title": "Atmosphere 04",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "B64C3DED-6530-42D7-B8D9-FFA2D9896558",
+      "kind": "atmosphere",
+      "title": "Atmosphere 05",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "A119D45E-166C-4F3E-8E5E-B2FE9EAEB901",
+      "kind": "atmosphere",
+      "title": "Atmosphere 06",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "24F5FC5A-EB45-4889-ADD3-4D6E24E5201A",
+      "kind": "atmosphere",
+      "title": "Atmosphere 07",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "6D96CD48-A8AF-44E8-B4BB-019C5B094E48",
+      "kind": "atmosphere",
+      "title": "Atmosphere 08",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "F62A3CFB-4C97-4950-9D08-71A0965FD10B",
+      "kind": "atmosphere",
+      "title": "Atmosphere 09",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "F0FDBE5E-7B6B-4BD7-A113-82AD9F91E617",
+      "kind": "atmosphere",
+      "title": "Atmosphere 10",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "D434AE89-7C34-41C8-AA9D-D6BEC59D8401",
+      "kind": "atmosphere",
+      "title": "Atmosphere 11",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "BF2C3E5F-972B-4A6B-B3EE-3E07D471E26A",
+      "kind": "atmosphere",
+      "title": "Atmosphere 12",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "2941597B-3215-432F-BE61-CA7CF235C840",
+      "kind": "atmosphere",
+      "title": "Atmosphere 13",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "AB0C2335-4F0C-4BD2-B887-F890C71C3F24",
+      "kind": "atmosphere",
+      "title": "Atmosphere 14",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "5CAD84C3-2769-4CAD-A4AC-B9A0D22E483E",
+      "kind": "atmosphere",
+      "title": "Atmosphere 15",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "BCAEBEF0-342D-444E-ABCF-0F4A7219C909",
+      "kind": "atmosphere",
+      "title": "Atmosphere 16",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "815F4CF9-C150-416A-B197-3370FD9D35A6",
+      "kind": "atmosphere",
+      "title": "Atmosphere 17",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "FCD0837A-ACE9-480C-8C4C-5FA010C1F638",
+      "kind": "atmosphere",
+      "title": "Atmosphere 18",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "A2F85D8A-30EB-48AE-AC1A-2D8F0F0E396B",
+      "kind": "atmosphere",
+      "title": "Atmosphere 19",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "F2D9C67E-94C4-41A5-9F10-FA0D29A68E1D",
+      "kind": "atmosphere",
+      "title": "Atmosphere 20",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "A026CA34-DF62-420E-B7B5-3F57F088CFF2",
+      "kind": "sfx",
+      "title": "SFX 01",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "ACD8C9B6-E776-4D08-BF9F-84583A6EF4F2",
+      "kind": "sfx",
+      "title": "SFX 02",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "8AF757AD-6D70-422B-A25D-59EF03A9C74E",
+      "kind": "sfx",
+      "title": "SFX 03",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "B625EC60-0655-48DF-B76A-F03F93C8E990",
+      "kind": "sfx",
+      "title": "SFX 04",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "87600D7B-853F-4A48-8473-0B86AD5DC021",
+      "kind": "sfx",
+      "title": "SFX 05",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "FE9B7163-E8A3-41A5-A910-67FE337BCF9D",
+      "kind": "sfx",
+      "title": "SFX 06",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "E7CAC42F-3713-4D65-BEEF-764C3D678414",
+      "kind": "sfx",
+      "title": "SFX 07",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "CBDB1B4A-4BF3-4E0D-80BB-68A6E18D01F5",
+      "kind": "sfx",
+      "title": "SFX 08",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "020DD019-5B3D-48F3-BF60-A4B9FF44A44F",
+      "kind": "sfx",
+      "title": "SFX 09",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "7D580F30-AC20-4B19-A185-D18AE88028F4",
+      "kind": "sfx",
+      "title": "SFX 10",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "4778E4BA-5196-427B-A963-154F3B3BFB4F",
+      "kind": "sfx",
+      "title": "SFX 11",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "ED2A8C12-044A-4F97-9395-54751A7A466A",
+      "kind": "sfx",
+      "title": "SFX 12",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "10A1E916-A778-44DE-9E7C-71DDDD55199F",
+      "kind": "sfx",
+      "title": "SFX 13",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "881323C8-EF87-46CA-8EA4-EBF7F11AA078",
+      "kind": "sfx",
+      "title": "SFX 14",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "C77AD8EE-8429-49F4-A545-97369FEEA88E",
+      "kind": "sfx",
+      "title": "SFX 15",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "7E10D622-DA6B-4F39-AA9E-03BC03ECAD95",
+      "kind": "sfx",
+      "title": "SFX 16",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "0408A519-2B27-4FF8-9901-8611181C1F33",
+      "kind": "sfx",
+      "title": "SFX 17",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "D8F7ECB6-7AF3-41B4-B9EA-39599EE1C488",
+      "kind": "sfx",
+      "title": "SFX 18",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "F745B2C3-6B1B-4768-A70E-9D6A4EF1FD15",
+      "kind": "sfx",
+      "title": "SFX 19",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "1BF3F1B2-6C4C-4051-9F1A-FEC5489AC3B2",
+      "kind": "sfx",
+      "title": "SFX 20",
+      "subtitle": null,
+      "duration": null,
+      "artwork_url": null,
+      "is_visible": true,
+      "created_at": "2026-02-05T00:00:00Z",
+      "updated_at": "2026-02-05T00:00:00Z"
+    }
+  ],
+  "musicPlaylists": [
+    {
+      "item_id": "2E9C40F5-0F8F-4A45-9E8E-57A77C9F2F27",
+      "apple_music_playlist_id": "pl.u-11zB9d1TZNrgkz",
+      "use_snapshot": false
+    }
+  ],
+  "packs": [
+    {
+      "id": "FB4C5C94-8244-4404-AAB4-6BDD58CDA6DF",
+      "kind": "atmosphere",
+      "title": "Starter Atmospheres",
+      "description": "Seeded ambience set",
+      "artwork_url": null,
+      "version": 1,
+      "manifest_url": "https://example.com/atmo-pack.json",
+      "created_at": "2026-02-05T00:00:00Z"
+    },
+    {
+      "id": "D24A500E-EE0C-45B4-B99A-AC9F7B185F32",
+      "kind": "sfx",
+      "title": "Starter SFX",
+      "description": "Seeded sound effects set",
+      "artwork_url": null,
+      "version": 1,
+      "manifest_url": "https://example.com/sfx-pack.json",
+      "created_at": "2026-02-05T00:00:00Z"
+    }
+  ],
+  "packItems": [
+    {
+      "pack_id": "FB4C5C94-8244-4404-AAB4-6BDD58CDA6DF",
+      "item_id": "F5A81D1B-C3C1-405D-B953-57DBA5FA2C1C",
+      "sort_order": 0
+    },
+    {
+      "pack_id": "FB4C5C94-8244-4404-AAB4-6BDD58CDA6DF",
+      "item_id": "1C8987BF-59EF-4EA9-9494-7EFAE5AEB98E",
+      "sort_order": 1
+    },
+    {
+      "pack_id": "FB4C5C94-8244-4404-AAB4-6BDD58CDA6DF",
+      "item_id": "9F50EE60-4EF7-4E50-90B2-FC3BA2C5358E",
+      "sort_order": 2
+    },
+    {
+      "pack_id": "FB4C5C94-8244-4404-AAB4-6BDD58CDA6DF",
+      "item_id": "1094955B-0B55-44A3-9CE5-625112FB9BFC",
+      "sort_order": 3
+    },
+    {
+      "pack_id": "FB4C5C94-8244-4404-AAB4-6BDD58CDA6DF",
+      "item_id": "B64C3DED-6530-42D7-B8D9-FFA2D9896558",
+      "sort_order": 4
+    },
+    {
+      "pack_id": "FB4C5C94-8244-4404-AAB4-6BDD58CDA6DF",
+      "item_id": "A119D45E-166C-4F3E-8E5E-B2FE9EAEB901",
+      "sort_order": 5
+    },
+    {
+      "pack_id": "FB4C5C94-8244-4404-AAB4-6BDD58CDA6DF",
+      "item_id": "24F5FC5A-EB45-4889-ADD3-4D6E24E5201A",
+      "sort_order": 6
+    },
+    {
+      "pack_id": "FB4C5C94-8244-4404-AAB4-6BDD58CDA6DF",
+      "item_id": "6D96CD48-A8AF-44E8-B4BB-019C5B094E48",
+      "sort_order": 7
+    },
+    {
+      "pack_id": "FB4C5C94-8244-4404-AAB4-6BDD58CDA6DF",
+      "item_id": "F62A3CFB-4C97-4950-9D08-71A0965FD10B",
+      "sort_order": 8
+    },
+    {
+      "pack_id": "FB4C5C94-8244-4404-AAB4-6BDD58CDA6DF",
+      "item_id": "F0FDBE5E-7B6B-4BD7-A113-82AD9F91E617",
+      "sort_order": 9
+    },
+    {
+      "pack_id": "FB4C5C94-8244-4404-AAB4-6BDD58CDA6DF",
+      "item_id": "D434AE89-7C34-41C8-AA9D-D6BEC59D8401",
+      "sort_order": 10
+    },
+    {
+      "pack_id": "FB4C5C94-8244-4404-AAB4-6BDD58CDA6DF",
+      "item_id": "BF2C3E5F-972B-4A6B-B3EE-3E07D471E26A",
+      "sort_order": 11
+    },
+    {
+      "pack_id": "FB4C5C94-8244-4404-AAB4-6BDD58CDA6DF",
+      "item_id": "2941597B-3215-432F-BE61-CA7CF235C840",
+      "sort_order": 12
+    },
+    {
+      "pack_id": "FB4C5C94-8244-4404-AAB4-6BDD58CDA6DF",
+      "item_id": "AB0C2335-4F0C-4BD2-B887-F890C71C3F24",
+      "sort_order": 13
+    },
+    {
+      "pack_id": "FB4C5C94-8244-4404-AAB4-6BDD58CDA6DF",
+      "item_id": "5CAD84C3-2769-4CAD-A4AC-B9A0D22E483E",
+      "sort_order": 14
+    },
+    {
+      "pack_id": "FB4C5C94-8244-4404-AAB4-6BDD58CDA6DF",
+      "item_id": "BCAEBEF0-342D-444E-ABCF-0F4A7219C909",
+      "sort_order": 15
+    },
+    {
+      "pack_id": "FB4C5C94-8244-4404-AAB4-6BDD58CDA6DF",
+      "item_id": "815F4CF9-C150-416A-B197-3370FD9D35A6",
+      "sort_order": 16
+    },
+    {
+      "pack_id": "FB4C5C94-8244-4404-AAB4-6BDD58CDA6DF",
+      "item_id": "FCD0837A-ACE9-480C-8C4C-5FA010C1F638",
+      "sort_order": 17
+    },
+    {
+      "pack_id": "FB4C5C94-8244-4404-AAB4-6BDD58CDA6DF",
+      "item_id": "A2F85D8A-30EB-48AE-AC1A-2D8F0F0E396B",
+      "sort_order": 18
+    },
+    {
+      "pack_id": "FB4C5C94-8244-4404-AAB4-6BDD58CDA6DF",
+      "item_id": "F2D9C67E-94C4-41A5-9F10-FA0D29A68E1D",
+      "sort_order": 19
+    },
+    {
+      "pack_id": "D24A500E-EE0C-45B4-B99A-AC9F7B185F32",
+      "item_id": "A026CA34-DF62-420E-B7B5-3F57F088CFF2",
+      "sort_order": 0
+    },
+    {
+      "pack_id": "D24A500E-EE0C-45B4-B99A-AC9F7B185F32",
+      "item_id": "ACD8C9B6-E776-4D08-BF9F-84583A6EF4F2",
+      "sort_order": 1
+    },
+    {
+      "pack_id": "D24A500E-EE0C-45B4-B99A-AC9F7B185F32",
+      "item_id": "8AF757AD-6D70-422B-A25D-59EF03A9C74E",
+      "sort_order": 2
+    },
+    {
+      "pack_id": "D24A500E-EE0C-45B4-B99A-AC9F7B185F32",
+      "item_id": "B625EC60-0655-48DF-B76A-F03F93C8E990",
+      "sort_order": 3
+    },
+    {
+      "pack_id": "D24A500E-EE0C-45B4-B99A-AC9F7B185F32",
+      "item_id": "87600D7B-853F-4A48-8473-0B86AD5DC021",
+      "sort_order": 4
+    },
+    {
+      "pack_id": "D24A500E-EE0C-45B4-B99A-AC9F7B185F32",
+      "item_id": "FE9B7163-E8A3-41A5-A910-67FE337BCF9D",
+      "sort_order": 5
+    },
+    {
+      "pack_id": "D24A500E-EE0C-45B4-B99A-AC9F7B185F32",
+      "item_id": "E7CAC42F-3713-4D65-BEEF-764C3D678414",
+      "sort_order": 6
+    },
+    {
+      "pack_id": "D24A500E-EE0C-45B4-B99A-AC9F7B185F32",
+      "item_id": "CBDB1B4A-4BF3-4E0D-80BB-68A6E18D01F5",
+      "sort_order": 7
+    },
+    {
+      "pack_id": "D24A500E-EE0C-45B4-B99A-AC9F7B185F32",
+      "item_id": "020DD019-5B3D-48F3-BF60-A4B9FF44A44F",
+      "sort_order": 8
+    },
+    {
+      "pack_id": "D24A500E-EE0C-45B4-B99A-AC9F7B185F32",
+      "item_id": "7D580F30-AC20-4B19-A185-D18AE88028F4",
+      "sort_order": 9
+    },
+    {
+      "pack_id": "D24A500E-EE0C-45B4-B99A-AC9F7B185F32",
+      "item_id": "4778E4BA-5196-427B-A963-154F3B3BFB4F",
+      "sort_order": 10
+    },
+    {
+      "pack_id": "D24A500E-EE0C-45B4-B99A-AC9F7B185F32",
+      "item_id": "ED2A8C12-044A-4F97-9395-54751A7A466A",
+      "sort_order": 11
+    },
+    {
+      "pack_id": "D24A500E-EE0C-45B4-B99A-AC9F7B185F32",
+      "item_id": "10A1E916-A778-44DE-9E7C-71DDDD55199F",
+      "sort_order": 12
+    },
+    {
+      "pack_id": "D24A500E-EE0C-45B4-B99A-AC9F7B185F32",
+      "item_id": "881323C8-EF87-46CA-8EA4-EBF7F11AA078",
+      "sort_order": 13
+    },
+    {
+      "pack_id": "D24A500E-EE0C-45B4-B99A-AC9F7B185F32",
+      "item_id": "C77AD8EE-8429-49F4-A545-97369FEEA88E",
+      "sort_order": 14
+    },
+    {
+      "pack_id": "D24A500E-EE0C-45B4-B99A-AC9F7B185F32",
+      "item_id": "7E10D622-DA6B-4F39-AA9E-03BC03ECAD95",
+      "sort_order": 15
+    },
+    {
+      "pack_id": "D24A500E-EE0C-45B4-B99A-AC9F7B185F32",
+      "item_id": "0408A519-2B27-4FF8-9901-8611181C1F33",
+      "sort_order": 16
+    },
+    {
+      "pack_id": "D24A500E-EE0C-45B4-B99A-AC9F7B185F32",
+      "item_id": "D8F7ECB6-7AF3-41B4-B9EA-39599EE1C488",
+      "sort_order": 17
+    },
+    {
+      "pack_id": "D24A500E-EE0C-45B4-B99A-AC9F7B185F32",
+      "item_id": "F745B2C3-6B1B-4768-A70E-9D6A4EF1FD15",
+      "sort_order": 18
+    },
+    {
+      "pack_id": "D24A500E-EE0C-45B4-B99A-AC9F7B185F32",
+      "item_id": "1BF3F1B2-6C4C-4051-9F1A-FEC5489AC3B2",
+      "sort_order": 19
+    }
+  ],
+  "itemTags": [
+    {
+      "item_id": "2E9C40F5-0F8F-4A45-9E8E-57A77C9F2F27",
+      "locations": [],
+      "moods": [
+        {
+          "name": "Investigative"
+        },
+        {
+          "name": "Ominous"
+        }
+      ],
+      "music_themes": [
+        {
+          "name": "Mystery / Investigation"
+        },
+        {
+          "name": "Noir / Crime"
+        }
+      ],
+      "atmosphere_themes": [],
+      "sfx_themes": [],
+      "creature_types": []
+    },
+    {
+      "item_id": "F5A81D1B-C3C1-405D-B953-57DBA5FA2C1C",
+      "locations": [
+        {
+          "name": "Forest"
+        }
+      ],
+      "moods": [
+        {
+          "name": "Ominous"
+        }
+      ],
+      "music_themes": [],
+      "atmosphere_themes": [
+        {
+          "name": "Festival / Carnival"
+        }
+      ],
+      "sfx_themes": [],
+      "creature_types": []
+    },
+    {
+      "item_id": "1C8987BF-59EF-4EA9-9494-7EFAE5AEB98E",
+      "locations": [
+        {
+          "name": "Desert"
+        }
+      ],
+      "moods": [
+        {
+          "name": "Curious"
+        }
+      ],
+      "music_themes": [],
+      "atmosphere_themes": [
+        {
+          "name": "Investigation / Crime Scene"
+        }
+      ],
+      "sfx_themes": [],
+      "creature_types": []
+    },
+    {
+      "item_id": "9F50EE60-4EF7-4E50-90B2-FC3BA2C5358E",
+      "locations": [
+        {
+          "name": "Urban"
+        }
+      ],
+      "moods": [
+        {
+          "name": "Lighthearted"
+        }
+      ],
+      "music_themes": [],
+      "atmosphere_themes": [
+        {
+          "name": "Sacred / Divine Presence"
+        }
+      ],
+      "sfx_themes": [],
+      "creature_types": []
+    },
+    {
+      "item_id": "1094955B-0B55-44A3-9CE5-625112FB9BFC",
+      "locations": [
+        {
+          "name": "Swamp"
+        }
+      ],
+      "moods": [
+        {
+          "name": "Suspenseful"
+        }
+      ],
+      "music_themes": [],
+      "atmosphere_themes": [
+        {
+          "name": "Haunting / Paranormal"
+        }
+      ],
+      "sfx_themes": [],
+      "creature_types": []
+    },
+    {
+      "item_id": "B64C3DED-6530-42D7-B8D9-FFA2D9896558",
+      "locations": [
+        {
+          "name": "Mountain"
+        }
+      ],
+      "moods": [
+        {
+          "name": "Cozy"
+        }
+      ],
+      "music_themes": [],
+      "atmosphere_themes": [
+        {
+          "name": "Dreamscape / Surreal"
+        }
+      ],
+      "sfx_themes": [],
+      "creature_types": []
+    },
+    {
+      "item_id": "A119D45E-166C-4F3E-8E5E-B2FE9EAEB901",
+      "locations": [
+        {
+          "name": "Coastal"
+        }
+      ],
+      "moods": [
+        {
+          "name": "Mysterious"
+        }
+      ],
+      "music_themes": [],
+      "atmosphere_themes": [
+        {
+          "name": "Frontier Outpost"
+        }
+      ],
+      "sfx_themes": [],
+      "creature_types": []
+    },
+    {
+      "item_id": "24F5FC5A-EB45-4889-ADD3-4D6E24E5201A",
+      "locations": [
+        {
+          "name": "Underdark"
+        }
+      ],
+      "moods": [
+        {
+          "name": "Ominous"
+        }
+      ],
+      "music_themes": [],
+      "atmosphere_themes": [
+        {
+          "name": "Festival / Carnival"
+        }
+      ],
+      "sfx_themes": [],
+      "creature_types": []
+    },
+    {
+      "item_id": "6D96CD48-A8AF-44E8-B4BB-019C5B094E48",
+      "locations": [
+        {
+          "name": "Arctic"
+        }
+      ],
+      "moods": [
+        {
+          "name": "Curious"
+        }
+      ],
+      "music_themes": [],
+      "atmosphere_themes": [
+        {
+          "name": "Investigation / Crime Scene"
+        }
+      ],
+      "sfx_themes": [],
+      "creature_types": []
+    },
+    {
+      "item_id": "F62A3CFB-4C97-4950-9D08-71A0965FD10B",
+      "locations": [
+        {
+          "name": "Forest"
+        }
+      ],
+      "moods": [
+        {
+          "name": "Lighthearted"
+        }
+      ],
+      "music_themes": [],
+      "atmosphere_themes": [
+        {
+          "name": "Sacred / Divine Presence"
+        }
+      ],
+      "sfx_themes": [],
+      "creature_types": []
+    },
+    {
+      "item_id": "F0FDBE5E-7B6B-4BD7-A113-82AD9F91E617",
+      "locations": [
+        {
+          "name": "Desert"
+        }
+      ],
+      "moods": [
+        {
+          "name": "Suspenseful"
+        }
+      ],
+      "music_themes": [],
+      "atmosphere_themes": [
+        {
+          "name": "Haunting / Paranormal"
+        }
+      ],
+      "sfx_themes": [],
+      "creature_types": []
+    },
+    {
+      "item_id": "D434AE89-7C34-41C8-AA9D-D6BEC59D8401",
+      "locations": [
+        {
+          "name": "Urban"
+        }
+      ],
+      "moods": [
+        {
+          "name": "Cozy"
+        }
+      ],
+      "music_themes": [],
+      "atmosphere_themes": [
+        {
+          "name": "Dreamscape / Surreal"
+        }
+      ],
+      "sfx_themes": [],
+      "creature_types": []
+    },
+    {
+      "item_id": "BF2C3E5F-972B-4A6B-B3EE-3E07D471E26A",
+      "locations": [
+        {
+          "name": "Swamp"
+        }
+      ],
+      "moods": [
+        {
+          "name": "Mysterious"
+        }
+      ],
+      "music_themes": [],
+      "atmosphere_themes": [
+        {
+          "name": "Frontier Outpost"
+        }
+      ],
+      "sfx_themes": [],
+      "creature_types": []
+    },
+    {
+      "item_id": "2941597B-3215-432F-BE61-CA7CF235C840",
+      "locations": [
+        {
+          "name": "Mountain"
+        }
+      ],
+      "moods": [
+        {
+          "name": "Ominous"
+        }
+      ],
+      "music_themes": [],
+      "atmosphere_themes": [
+        {
+          "name": "Festival / Carnival"
+        }
+      ],
+      "sfx_themes": [],
+      "creature_types": []
+    },
+    {
+      "item_id": "AB0C2335-4F0C-4BD2-B887-F890C71C3F24",
+      "locations": [
+        {
+          "name": "Coastal"
+        }
+      ],
+      "moods": [
+        {
+          "name": "Curious"
+        }
+      ],
+      "music_themes": [],
+      "atmosphere_themes": [
+        {
+          "name": "Investigation / Crime Scene"
+        }
+      ],
+      "sfx_themes": [],
+      "creature_types": []
+    },
+    {
+      "item_id": "5CAD84C3-2769-4CAD-A4AC-B9A0D22E483E",
+      "locations": [
+        {
+          "name": "Underdark"
+        }
+      ],
+      "moods": [
+        {
+          "name": "Lighthearted"
+        }
+      ],
+      "music_themes": [],
+      "atmosphere_themes": [
+        {
+          "name": "Sacred / Divine Presence"
+        }
+      ],
+      "sfx_themes": [],
+      "creature_types": []
+    },
+    {
+      "item_id": "BCAEBEF0-342D-444E-ABCF-0F4A7219C909",
+      "locations": [
+        {
+          "name": "Arctic"
+        }
+      ],
+      "moods": [
+        {
+          "name": "Suspenseful"
+        }
+      ],
+      "music_themes": [],
+      "atmosphere_themes": [
+        {
+          "name": "Haunting / Paranormal"
+        }
+      ],
+      "sfx_themes": [],
+      "creature_types": []
+    },
+    {
+      "item_id": "815F4CF9-C150-416A-B197-3370FD9D35A6",
+      "locations": [
+        {
+          "name": "Forest"
+        }
+      ],
+      "moods": [
+        {
+          "name": "Cozy"
+        }
+      ],
+      "music_themes": [],
+      "atmosphere_themes": [
+        {
+          "name": "Dreamscape / Surreal"
+        }
+      ],
+      "sfx_themes": [],
+      "creature_types": []
+    },
+    {
+      "item_id": "FCD0837A-ACE9-480C-8C4C-5FA010C1F638",
+      "locations": [
+        {
+          "name": "Desert"
+        }
+      ],
+      "moods": [
+        {
+          "name": "Mysterious"
+        }
+      ],
+      "music_themes": [],
+      "atmosphere_themes": [
+        {
+          "name": "Frontier Outpost"
+        }
+      ],
+      "sfx_themes": [],
+      "creature_types": []
+    },
+    {
+      "item_id": "A2F85D8A-30EB-48AE-AC1A-2D8F0F0E396B",
+      "locations": [
+        {
+          "name": "Urban"
+        }
+      ],
+      "moods": [
+        {
+          "name": "Ominous"
+        }
+      ],
+      "music_themes": [],
+      "atmosphere_themes": [
+        {
+          "name": "Festival / Carnival"
+        }
+      ],
+      "sfx_themes": [],
+      "creature_types": []
+    },
+    {
+      "item_id": "F2D9C67E-94C4-41A5-9F10-FA0D29A68E1D",
+      "locations": [
+        {
+          "name": "Swamp"
+        }
+      ],
+      "moods": [
+        {
+          "name": "Curious"
+        }
+      ],
+      "music_themes": [],
+      "atmosphere_themes": [
+        {
+          "name": "Investigation / Crime Scene"
+        }
+      ],
+      "sfx_themes": [],
+      "creature_types": []
+    },
+    {
+      "item_id": "A026CA34-DF62-420E-B7B5-3F57F088CFF2",
+      "locations": [
+        {
+          "name": "Swamp"
+        }
+      ],
+      "moods": [],
+      "music_themes": [],
+      "atmosphere_themes": [],
+      "sfx_themes": [
+        {
+          "name": "Combat Impacts"
+        }
+      ],
+      "creature_types": [
+        {
+          "name": "Undead"
+        }
+      ]
+    },
+    {
+      "item_id": "ACD8C9B6-E776-4D08-BF9F-84583A6EF4F2",
+      "locations": [
+        {
+          "name": "Mountain"
+        }
+      ],
+      "moods": [],
+      "music_themes": [],
+      "atmosphere_themes": [],
+      "sfx_themes": [
+        {
+          "name": "Doors & Mechanisms"
+        }
+      ],
+      "creature_types": [
+        {
+          "name": "Beast"
+        }
+      ]
+    },
+    {
+      "item_id": "8AF757AD-6D70-422B-A25D-59EF03A9C74E",
+      "locations": [
+        {
+          "name": "Coastal"
+        }
+      ],
+      "moods": [],
+      "music_themes": [],
+      "atmosphere_themes": [],
+      "sfx_themes": [
+        {
+          "name": "Magic"
+        }
+      ],
+      "creature_types": [
+        {
+          "name": "Dragon"
+        }
+      ]
+    },
+    {
+      "item_id": "B625EC60-0655-48DF-B76A-F03F93C8E990",
+      "locations": [
+        {
+          "name": "Underdark"
+        }
+      ],
+      "moods": [],
+      "music_themes": [],
+      "atmosphere_themes": [],
+      "sfx_themes": [
+        {
+          "name": "Footsteps"
+        }
+      ],
+      "creature_types": [
+        {
+          "name": "Fey"
+        }
+      ]
+    },
+    {
+      "item_id": "87600D7B-853F-4A48-8473-0B86AD5DC021",
+      "locations": [
+        {
+          "name": "Arctic"
+        }
+      ],
+      "moods": [],
+      "music_themes": [],
+      "atmosphere_themes": [],
+      "sfx_themes": [
+        {
+          "name": "Water Interactions"
+        }
+      ],
+      "creature_types": [
+        {
+          "name": "Undead"
+        }
+      ]
+    },
+    {
+      "item_id": "FE9B7163-E8A3-41A5-A910-67FE337BCF9D",
+      "locations": [
+        {
+          "name": "Forest"
+        }
+      ],
+      "moods": [],
+      "music_themes": [],
+      "atmosphere_themes": [],
+      "sfx_themes": [
+        {
+          "name": "Fire & Heat"
+        }
+      ],
+      "creature_types": [
+        {
+          "name": "Beast"
+        }
+      ]
+    },
+    {
+      "item_id": "E7CAC42F-3713-4D65-BEEF-764C3D678414",
+      "locations": [
+        {
+          "name": "Desert"
+        }
+      ],
+      "moods": [],
+      "music_themes": [],
+      "atmosphere_themes": [],
+      "sfx_themes": [
+        {
+          "name": "Horror Stingers"
+        }
+      ],
+      "creature_types": [
+        {
+          "name": "Dragon"
+        }
+      ]
+    },
+    {
+      "item_id": "CBDB1B4A-4BF3-4E0D-80BB-68A6E18D01F5",
+      "locations": [
+        {
+          "name": "Urban"
+        }
+      ],
+      "moods": [],
+      "music_themes": [],
+      "atmosphere_themes": [],
+      "sfx_themes": [
+        {
+          "name": "Monsters & Beasts"
+        }
+      ],
+      "creature_types": [
+        {
+          "name": "Fey"
+        }
+      ]
+    },
+    {
+      "item_id": "020DD019-5B3D-48F3-BF60-A4B9FF44A44F",
+      "locations": [
+        {
+          "name": "Swamp"
+        }
+      ],
+      "moods": [],
+      "music_themes": [],
+      "atmosphere_themes": [],
+      "sfx_themes": [
+        {
+          "name": "Combat Impacts"
+        }
+      ],
+      "creature_types": [
+        {
+          "name": "Undead"
+        }
+      ]
+    },
+    {
+      "item_id": "7D580F30-AC20-4B19-A185-D18AE88028F4",
+      "locations": [
+        {
+          "name": "Mountain"
+        }
+      ],
+      "moods": [],
+      "music_themes": [],
+      "atmosphere_themes": [],
+      "sfx_themes": [
+        {
+          "name": "Doors & Mechanisms"
+        }
+      ],
+      "creature_types": [
+        {
+          "name": "Beast"
+        }
+      ]
+    },
+    {
+      "item_id": "4778E4BA-5196-427B-A963-154F3B3BFB4F",
+      "locations": [
+        {
+          "name": "Coastal"
+        }
+      ],
+      "moods": [],
+      "music_themes": [],
+      "atmosphere_themes": [],
+      "sfx_themes": [
+        {
+          "name": "Magic"
+        }
+      ],
+      "creature_types": [
+        {
+          "name": "Dragon"
+        }
+      ]
+    },
+    {
+      "item_id": "ED2A8C12-044A-4F97-9395-54751A7A466A",
+      "locations": [
+        {
+          "name": "Underdark"
+        }
+      ],
+      "moods": [],
+      "music_themes": [],
+      "atmosphere_themes": [],
+      "sfx_themes": [
+        {
+          "name": "Footsteps"
+        }
+      ],
+      "creature_types": [
+        {
+          "name": "Fey"
+        }
+      ]
+    },
+    {
+      "item_id": "10A1E916-A778-44DE-9E7C-71DDDD55199F",
+      "locations": [
+        {
+          "name": "Arctic"
+        }
+      ],
+      "moods": [],
+      "music_themes": [],
+      "atmosphere_themes": [],
+      "sfx_themes": [
+        {
+          "name": "Water Interactions"
+        }
+      ],
+      "creature_types": [
+        {
+          "name": "Undead"
+        }
+      ]
+    },
+    {
+      "item_id": "881323C8-EF87-46CA-8EA4-EBF7F11AA078",
+      "locations": [
+        {
+          "name": "Forest"
+        }
+      ],
+      "moods": [],
+      "music_themes": [],
+      "atmosphere_themes": [],
+      "sfx_themes": [
+        {
+          "name": "Fire & Heat"
+        }
+      ],
+      "creature_types": [
+        {
+          "name": "Beast"
+        }
+      ]
+    },
+    {
+      "item_id": "C77AD8EE-8429-49F4-A545-97369FEEA88E",
+      "locations": [
+        {
+          "name": "Desert"
+        }
+      ],
+      "moods": [],
+      "music_themes": [],
+      "atmosphere_themes": [],
+      "sfx_themes": [
+        {
+          "name": "Horror Stingers"
+        }
+      ],
+      "creature_types": [
+        {
+          "name": "Dragon"
+        }
+      ]
+    },
+    {
+      "item_id": "7E10D622-DA6B-4F39-AA9E-03BC03ECAD95",
+      "locations": [
+        {
+          "name": "Urban"
+        }
+      ],
+      "moods": [],
+      "music_themes": [],
+      "atmosphere_themes": [],
+      "sfx_themes": [
+        {
+          "name": "Monsters & Beasts"
+        }
+      ],
+      "creature_types": [
+        {
+          "name": "Fey"
+        }
+      ]
+    },
+    {
+      "item_id": "0408A519-2B27-4FF8-9901-8611181C1F33",
+      "locations": [
+        {
+          "name": "Swamp"
+        }
+      ],
+      "moods": [],
+      "music_themes": [],
+      "atmosphere_themes": [],
+      "sfx_themes": [
+        {
+          "name": "Combat Impacts"
+        }
+      ],
+      "creature_types": [
+        {
+          "name": "Undead"
+        }
+      ]
+    },
+    {
+      "item_id": "D8F7ECB6-7AF3-41B4-B9EA-39599EE1C488",
+      "locations": [
+        {
+          "name": "Mountain"
+        }
+      ],
+      "moods": [],
+      "music_themes": [],
+      "atmosphere_themes": [],
+      "sfx_themes": [
+        {
+          "name": "Doors & Mechanisms"
+        }
+      ],
+      "creature_types": [
+        {
+          "name": "Beast"
+        }
+      ]
+    },
+    {
+      "item_id": "F745B2C3-6B1B-4768-A70E-9D6A4EF1FD15",
+      "locations": [
+        {
+          "name": "Coastal"
+        }
+      ],
+      "moods": [],
+      "music_themes": [],
+      "atmosphere_themes": [],
+      "sfx_themes": [
+        {
+          "name": "Magic"
+        }
+      ],
+      "creature_types": [
+        {
+          "name": "Dragon"
+        }
+      ]
+    },
+    {
+      "item_id": "1BF3F1B2-6C4C-4051-9F1A-FEC5489AC3B2",
+      "locations": [
+        {
+          "name": "Underdark"
+        }
+      ],
+      "moods": [],
+      "music_themes": [],
+      "atmosphere_themes": [],
+      "sfx_themes": [
+        {
+          "name": "Footsteps"
+        }
+      ],
+      "creature_types": [
+        {
+          "name": "Fey"
+        }
+      ]
+    }
+  ]
+}

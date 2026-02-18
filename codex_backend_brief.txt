@@ -1,0 +1,460 @@
+CODEx BRIEF: iOS Backend in Swift for Music Playlists + Downloadable Audio Packs + Open-Ended Taxonomy Tagging
+==========================================================================================
+
+Objective
+---------
+Build the backend layer for an iOS app (Swift) that manages a tagged sound library with:
+
+1) Music
+   - Each Music entry is an Apple Music playlist (MusicKit).
+   - The app always displays all Music entries (no user-added playlists; no downloads).
+   - Backend stores playlist identifiers and taxonomy tags; optionally caches playlist track metadata for fast detail views.
+
+2) Atmospheres & Sound Effects
+   - Available as downloadable packs.
+   - Pack download stores audio locally and updates pack state/progress.
+   - Individual entries inside a pack are browsable (can be shown locked until pack is installed).
+
+3) Taxonomy / Tags
+   - Content is categorized by dimensions (Location, Mood, Themes, Creature Type).
+   - Must support fast multi-filter queries and facet counts.
+
+Preferred stack
+---------------
+- SQLite + GRDB (migrations, records, query builder).
+- URLSession for downloads (optionally background configuration).
+- Store files in Application Support (not Documents).
+
+Critical Requirement: No hard limits on tags
+--------------------------------------------
+There must be NO hard limitation to the number of different possible tag values in:
+- Mood
+- Location
+- Themes (Music/Atmosphere/SFX)
+- Creature Types
+
+New packs or new seeded playlists may introduce new tag values at any time. The system must:
+- import them automatically (upsert into dimension tables)
+- allow tagging items with them
+- include them in filtering and facet counts
+- remain backward compatible with existing data
+
+Do NOT:
+- hardcode exact counts (e.g., “15 moods”)
+- use Swift enums that must be kept in sync with the database vocabulary
+- enforce CHECK constraints on specific names
+- assume the “initial seed list” is complete
+
+Instead:
+- treat dimension values as data in the database
+- represent tags in Swift as records (id + name)
+- design seed + manifest import to upsert dimension values dynamically
+
+
+Initial Seeded Vocabularies (open-ended; may expand)
+----------------------------------------------------
+
+Shared Locations (17) — initial set
+- Arctic
+- Coastal
+- Desert
+- Forest
+- Grassland
+- Hill
+- Mountain
+- Swamp
+- Underdark
+- Underwater
+- Urban
+- Outer Space
+- Elemental Planes
+- Celestial Plane
+- Fey Plane
+- Shadow Plane
+- Hell
+
+Shared Moods (17) — initial set (exact strings)
+- Action
+- Mysterious
+- Horrific
+- Awe-Inspiring
+- Arcane Wonder
+- Suspenseful
+- Investigative
+- Lighthearted
+- Sentimental
+- Sorrowful
+- Cozy
+- Bustling
+- Curious
+- Intimate
+- Ominous
+- Victorious & Jubilant
+- Wistful
+
+Music Themes (17) — initial set
+- Hero’s Journey
+- Villain / Menace
+- Mystery / Investigation
+- Horror / Occult
+- Romance / Longing
+- Comedy / Capers
+- Tragedy / Loss
+- Epic War
+- Mythic Fantasy
+- Cosmic / Sci-Fi
+- Noir / Crime
+- Western / Frontier
+- Cyberpunk / Neon
+- Steampunk / Clockwork
+- Ancient / Ritual
+- Battlefield (Active)
+- Battlefield (Aftermath)
+
+Atmosphere Themes (15) — initial set
+- Festival / Carnival
+- Ritual / Magic Working
+- Investigation / Crime Scene
+- Battlefield (Active)
+- Battlefield (Aftermath)
+- Expedition / Exploration
+- Frontier Outpost
+- High Society / Gala
+- Underworld / Den of Vice
+- Sacred / Divine Presence
+- Haunting / Paranormal
+- Dreamscape / Surreal
+- Apocalypse / Collapse
+- Political Intrigue / Court Tension
+- Nature Reclaiming / Overgrowth
+
+Sound Effects Themes (16) — initial set, no parentheticals
+- Combat Impacts
+- Weapon Handling
+- Magic
+- Tech Interface
+- Doors & Mechanisms
+- Tools & Crafting
+- Household Props
+- Vehicles & Mounts
+- Footsteps
+- Cloth & Gear
+- Water Interactions
+- Fire & Heat
+- Debris & Destruction
+- Stealth & Thievery
+- Horror Stingers
+- Monsters & Beasts
+
+Creature Types (14) — initial set (SFX only)
+- Aberration
+- Beast
+- Celestial
+- Construct
+- Dragon
+- Elemental
+- Fey
+- Fiend
+- Giant
+- Humanoid
+- Monstrosity
+- Ooze
+- Plant
+- Undead
+
+
+Data Model Requirements
+-----------------------
+
+Core concept
+- A single canonical library_item table represents every browseable entry:
+  - Music playlist entry
+  - Atmosphere entry
+  - Sound Effect entry
+- Tagging is done via many-to-many join tables referencing open-ended dimension tables.
+
+Music vs Packs
+- Music items:
+  - always present via seed import
+  - store only playlist references + tags
+- Atmosphere/SFX items:
+  - belong to a pack
+  - playable only after pack is downloaded and local audio assets exist
+
+
+Database Schema (SQLite)
+------------------------
+
+1) Core browseable items
+TABLE: library_item
+- id TEXT PRIMARY KEY (UUID)
+- kind TEXT NOT NULL CHECK(kind IN ('music','atmosphere','sfx'))
+- title TEXT NOT NULL
+- subtitle TEXT NULL
+- duration REAL NULL
+- artwork_url TEXT NULL
+- is_visible INTEGER NOT NULL DEFAULT 1
+- created_at TEXT NOT NULL
+- updated_at TEXT NOT NULL
+
+2) Music playlist reference (always visible)
+TABLE: music_playlist_ref
+- item_id TEXT PRIMARY KEY REFERENCES library_item(id) ON DELETE CASCADE
+- apple_music_playlist_id TEXT NOT NULL UNIQUE
+- last_sync_at TEXT NULL
+- use_snapshot INTEGER NOT NULL DEFAULT 0
+
+Optional: playlist membership cache (recommended)
+TABLE: music_track_cache
+- track_id TEXT PRIMARY KEY
+- title TEXT NOT NULL
+- artist TEXT NOT NULL
+- album TEXT NULL
+- duration REAL NULL
+- artwork_url TEXT NULL
+- last_seen_at TEXT NOT NULL
+
+TABLE: playlist_track
+- playlist_id TEXT NOT NULL
+- track_id TEXT NOT NULL
+- position INTEGER NOT NULL
+- snapshot_at TEXT NULL
+Choose ONE:
+  A) Snapshotting enabled: PRIMARY KEY(playlist_id, track_id, snapshot_at)
+  B) No snapshotting: remove snapshot_at and use PRIMARY KEY(playlist_id, track_id)
+
+3) Packs (downloadable for atmosphere and sfx)
+TABLE: pack
+- id TEXT PRIMARY KEY (UUID)
+- kind TEXT NOT NULL CHECK(kind IN ('atmosphere','sfx'))
+- title TEXT NOT NULL
+- description TEXT NULL
+- artwork_url TEXT NULL
+- version INTEGER NOT NULL
+- manifest_url TEXT NOT NULL
+- created_at TEXT NOT NULL
+
+TABLE: pack_state
+- pack_id TEXT PRIMARY KEY REFERENCES pack(id) ON DELETE CASCADE
+- state TEXT NOT NULL CHECK(state IN ('not_downloaded','downloading','downloaded','failed'))
+- bytes_total INTEGER NULL
+- bytes_downloaded INTEGER NULL
+- installed_version INTEGER NULL
+- last_error TEXT NULL
+- updated_at TEXT NOT NULL
+
+TABLE: pack_item
+- pack_id TEXT NOT NULL REFERENCES pack(id) ON DELETE CASCADE
+- item_id TEXT NOT NULL REFERENCES library_item(id) ON DELETE CASCADE
+- sort_order INTEGER NOT NULL
+- PRIMARY KEY(pack_id, item_id)
+
+4) Local audio assets (for downloaded packs)
+TABLE: local_asset
+- id TEXT PRIMARY KEY (UUID)
+- pack_id TEXT NOT NULL REFERENCES pack(id) ON DELETE CASCADE
+- remote_url TEXT NOT NULL
+- local_path TEXT NULL   (relative to Application Support)
+- etag TEXT NULL
+- sha256 TEXT NULL
+- bytes_total INTEGER NULL
+- created_at TEXT NOT NULL
+
+TABLE: item_local_audio
+- item_id TEXT PRIMARY KEY REFERENCES library_item(id) ON DELETE CASCADE
+- asset_id TEXT NOT NULL REFERENCES local_asset(id) ON DELETE CASCADE
+- codec TEXT NULL
+- sample_rate INTEGER NULL
+- channels INTEGER NULL
+- loopable INTEGER NOT NULL DEFAULT 0
+
+
+Taxonomy Dimension Tables + Joins (open-ended)
+----------------------------------------------
+
+Dimension tables (no hard limits; names are data)
+- location(id INTEGER PRIMARY KEY, name TEXT NOT NULL UNIQUE, sort_order INTEGER NULL, is_system INTEGER NOT NULL DEFAULT 1, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)
+- mood(id INTEGER PRIMARY KEY, name TEXT NOT NULL UNIQUE, sort_order INTEGER NULL, is_system INTEGER NOT NULL DEFAULT 1, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)
+- music_theme(id INTEGER PRIMARY KEY, name TEXT NOT NULL UNIQUE, sort_order INTEGER NULL, is_system INTEGER NOT NULL DEFAULT 1, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)
+- atmosphere_theme(id INTEGER PRIMARY KEY, name TEXT NOT NULL UNIQUE, sort_order INTEGER NULL, is_system INTEGER NOT NULL DEFAULT 1, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)
+- sfx_theme(id INTEGER PRIMARY KEY, name TEXT NOT NULL UNIQUE, sort_order INTEGER NULL, is_system INTEGER NOT NULL DEFAULT 1, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)
+- creature_type(id INTEGER PRIMARY KEY, name TEXT NOT NULL UNIQUE, sort_order INTEGER NULL, is_system INTEGER NOT NULL DEFAULT 1, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)
+
+Join tables (many-to-many)
+- item_location(item_id TEXT NOT NULL, location_id INTEGER NOT NULL, PRIMARY KEY(item_id, location_id))
+- item_mood(item_id TEXT NOT NULL, mood_id INTEGER NOT NULL, PRIMARY KEY(item_id, mood_id))
+- item_music_theme(item_id TEXT NOT NULL, music_theme_id INTEGER NOT NULL, PRIMARY KEY(item_id, music_theme_id))
+- item_atmosphere_theme(item_id TEXT NOT NULL, atmosphere_theme_id INTEGER NOT NULL, PRIMARY KEY(item_id, atmosphere_theme_id))
+- item_sfx_theme(item_id TEXT NOT NULL, sfx_theme_id INTEGER NOT NULL, PRIMARY KEY(item_id, sfx_theme_id))
+- item_creature_type(item_id TEXT NOT NULL, creature_type_id INTEGER NOT NULL, PRIMARY KEY(item_id, creature_type_id))
+
+Indexes (required)
+- CREATE INDEX idx_library_item_kind ON library_item(kind);
+- CREATE INDEX idx_item_location_location ON item_location(location_id);
+- CREATE INDEX idx_item_mood_mood ON item_mood(mood_id);
+- CREATE INDEX idx_item_music_theme_theme ON item_music_theme(music_theme_id);
+- CREATE INDEX idx_item_atmo_theme_theme ON item_atmosphere_theme(atmosphere_theme_id);
+- CREATE INDEX idx_item_sfx_theme_theme ON item_sfx_theme(sfx_theme_id);
+- CREATE INDEX idx_item_creature_type_type ON item_creature_type(creature_type_id);
+- CREATE INDEX idx_pack_item_pack ON pack_item(pack_id);
+- CREATE INDEX idx_pack_state_state ON pack_state(state);
+
+Kind enforcement (logic)
+- Music items may use: Location + Mood + MusicTheme
+- Atmosphere items may use: Location + Mood + AtmosphereTheme
+- SFX items may use: Location + SfxTheme + CreatureType (Mood optional; if you want Mood on SFX, allow it explicitly)
+
+
+Seed Import (must make Music always visible)
+-------------------------------------------
+
+Ship a bundled seed (JSON preferred) containing:
+- All dimension vocabularies used by the shipped catalog
+- All Music playlist library_item rows (kind=music) + music_playlist_ref + tag joins
+- All packs + pack items (pack, pack_item) + atmosphere/sfx library_item rows + tag joins
+
+Import behavior
+- Implement SeedImporter.importIfNeeded() on first launch (idempotent).
+- Implement SeedImporter.applyUpdates() (optional) to upsert catalog changes while preserving:
+  - pack_state
+  - local_asset.local_path and downloaded files
+Use stable UUIDs in seed so upserts are deterministic.
+
+IMPORTANT: Open-ended tags via seeding
+- Seed importer must upsert dimension values dynamically:
+  - INSERT INTO <dimension>(name,is_system) VALUES (?,1) ON CONFLICT(name) DO NOTHING
+  - then fetch id for join insertion
+- Join inserts must be conflict-ignoring (idempotent):
+  - INSERT INTO item_location(...) VALUES (...) ON CONFLICT DO NOTHING
+
+
+Pack Manifest + Download Pipeline
+---------------------------------
+
+Manifest JSON contract (exact keys)
+{
+  "packId": "UUID",
+  "version": 3,
+  "totalBytes": 12345678,
+  "assets": [
+    {
+      "assetId": "UUID",
+      "itemId": "UUID",
+      "url": "https://example.com/file.aac",
+      "sha256": "hexstring",
+      "bytes": 123456,
+      "codec": "aac",
+      "sampleRate": 48000,
+      "channels": 2,
+      "loopable": true,
+      "tags": {
+        "locations": ["Forest"],
+        "moods": ["Ominous"],
+        "themes": ["Horror Stingers"],
+        "creatureTypes": ["Undead"]
+      }
+    }
+  ]
+}
+
+Notes:
+- The tags object is optional. If present, it may contain NEW dimension values not previously known.
+- If tags are present at either pack-level or asset-level, importer MUST upsert dimension values and apply join rows.
+
+Local file layout
+- Write downloaded audio to:
+  Application Support/AudioAssets/<packId>/<assetId>.<ext>
+- Store local_asset.local_path as a RELATIVE path below Application Support.
+
+PackDownloadManager requirements
+- Async APIs:
+  - startDownload(packId: UUID)
+  - cancelDownload(packId: UUID)
+  - deletePack(packId: UUID): delete files + clear local_asset/item_local_audio for that pack, mark pack_state 'not_downloaded'
+  - repairOrResume(packId: UUID) (optional)
+
+Download rules
+- Set pack_state.state='downloading', initialize progress.
+- Download each asset; update bytes_downloaded.
+- Verify sha256 when provided; mismatch => fail.
+- On success: pack_state.state='downloaded', installed_version=pack.version.
+- On failure: pack_state.state='failed' and record last_error.
+- Must be resilient to app relaunch (persist state; if in-progress on relaunch, mark failed or resumable).
+
+
+Repository Layer (Swift APIs)
+-----------------------------
+
+Modeling tags
+- Represent tag values as data (NOT enums):
+  struct TagValue { let id: Int64; let name: String }
+
+Filters should use IDs (preferred) to avoid name collisions / renames:
+- Filters.locationIDs: [Int64]
+- Filters.moodIDs: [Int64]
+- Filters.musicThemeIDs: [Int64]
+- Filters.atmosphereThemeIDs: [Int64]
+- Filters.sfxThemeIDs: [Int64]
+- Filters.creatureTypeIDs: [Int64]
+
+Filtering semantics
+- AND across dimensions, OR within a dimension selection:
+  - e.g., Locations = [Forest, Swamp] => item in Forest OR Swamp
+  - Moods = [Ominous] AND Theme = [Horror Stingers] => item must satisfy both joins
+
+Primary repositories
+1) LibraryRepository
+- fetchItems(kind: Kind, filters: Filters, sort: Sort) async throws -> [LibraryItemRow]
+- fetchItemDetail(itemId: UUID) async throws -> ItemDetail (includes tags + availability)
+- searchItems(kind: Kind?, query: String, filters: Filters) async throws -> [LibraryItemRow] (optional FTS)
+
+2) FacetRepository
+- facetCounts(kind: Kind, filters: Filters) async throws -> FacetCounts
+  - Returns counts for each dimension relevant to kind, after applying current filters.
+  - Must be dynamic: facets come from dimension tables + joins, not hardcoded lists.
+
+3) PackRepository
+- listPacks(kind: Kind) async throws -> [PackWithState]
+- packDetail(packId: UUID) async throws -> PackDetail (items + state)
+- isPackInstalled(packId: UUID) async throws -> Bool
+
+4) MusicRepository
+- listMusicEntries() async throws -> [MusicEntry] (library_item + music_playlist_ref)
+- playlistID(for itemId: UUID) async throws -> String
+- Optional:
+  - refreshPlaylistMetadata(itemId: UUID) async (update cached title/artwork)
+  - refreshPlaylistTrackCache(itemId: UUID) async (populate music_track_cache + playlist_track)
+
+Availability logic
+- Music: always visible; playback may require MusicKit auth/subscription (return a status enum for UI).
+- Atmosphere/SFX: available if item_local_audio exists AND file exists at local_path.
+
+MusicKit integration points (backend only)
+- Provide helper to resolve playlist by apple_music_playlist_id.
+- Do not download music audio; only resolve for playback and metadata.
+
+Deliverables
+------------
+1) GRDB migrations implementing all tables + indexes
+2) Seed importer (idempotent), with optional upsert update mode
+3) Repository layer implementing:
+   - browse lists
+   - multi-filter queries
+   - dynamic faceted counts
+   - item detail (tags + availability)
+4) Pack download manager:
+   - manifest fetch/parse
+   - download/progress
+   - integrity verification
+   - uninstall/delete pack
+5) Optional: playlist track cache tables + sync methods
+
+Acceptance tests / scenarios
+----------------------------
+- On first launch, all seeded Music playlists appear in browse immediately.
+- Filtering by Location + Mood + Theme returns correct sets and facet counts update correctly.
+- Pack list shows not-downloaded packs; downloading updates progress and then makes items playable.
+- Packs can introduce new tag values; those tags appear in facets and can be used in filters without app update.
+- Deleting a pack removes local files and marks items unavailable while keeping catalog entries visible.
+- Seed import is idempotent (running twice does not duplicate rows).
+- Catalog updates do not break existing downloads (local_path preserved).

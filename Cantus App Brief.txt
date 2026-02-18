@@ -1,0 +1,78 @@
+# Your Task
+
+Your job is to build a native cross-platform MacOS, iPadOS, and iOS application using Swift, SwiftUI, and Mac Catalyst. It should follow best practices for development on Apple platforms.
+
+## Application Name and Description
+
+This application is called "Cantus: Roleplay DJ" and is a music player dedicated to roleplaying games.
+
+## Application Features
+
+The application should have the following features:
+- The application connects to and plays music from the user's Apple Music or Spotify account.
+- The application provides full access to all AirPlay and Bluetooth controls so the music can be routed to any connected audio devices.
+- The application groups music by theme, location, and mood.
+- A user can select a theme, location, or mood and the application will play through an auto-generated playlist of 10-15 songs that fit that selection.
+- The application will smoothly transition from song to song.
+- The application has a set of Atmosphere loops that can be played over the music (without interrupting or stopping the music).
+- The application has an integrated soundboard of sound effects (SFX) that can be played over the music (without interrupting or stopping the music or atmosphere loops).
+- The application provides a set of volume sliders for each of the three audio sources: Music, Atmosphere, and SFX.
+- The application should support system level Light and Dark mode appearances. 
+
+## Application Structure and Layout
+
+### First Launch
+
+When opening the application for the first time, the User is met with the first screen: Setup.
+- See "Setup Screen Design.png" for its layout.
+After the user has completed setup, they are taken to the Play Screen.
+
+### Play Screen
+
+When a user launches the application, if the app has already been setup, they are taken immediately to the Play screen.
+- See "Play Screen Design.png" for it's layout.
+
+#### Play Screen Features
+
+- The user can select an Atmosphere Loop to play.
+- The user can play a Soundboard SFX (sound effect).
+- The user can customize the screen with up to six bookmarked Atmosphere Loops and up to six Soundboard SFX (sound effects).
+- The user can adjust the volumes of each sound type: Music, Atmosphere, SFX.
+- The user can select a music playlist.
+- The user can play and pause a music playlist, skip to the next track, or go back to the previous track.
+- The user can select an AirPlay or other Device to route the audio from the application.
+
+From the Play screen, the user can access three panels for selecting a playlist, atmosphere loops, and sound effects.
+
+- See "Playlist Selection Panel Design.png" for the playlist panel layout.
+- See "Atmosphere Selection Panel Design.png" for the atmosphere loop panel layout.
+- See "Soundboard Selection Panel Design.png" for the soundboard panel layout.
+
+#### Playlist Selection Panel
+
+While this panel is open, the user can:
+- Swipe down from the top to close the panel.
+- Search for a playlist.
+- Browse playlists by Theme, Location, or Mood.
+- Select a playlist to begin playback.
+- Use the playback controls at the bottom of the screen to play and pause the currently selected music playlist, skip to the next track, or go back to the previous track.
+
+#### Soundboard Selection Panel
+
+While this panel open, the user can:
+- Swipe down from the top to close the panel.
+- Search for a sound effect.
+- Browse sound effects by Theme, Location, or Creature.
+- Select a sound effect to play it immediately.
+- Bookmark up to 7 sound effects, which places them in the "Soundboard SFX" section on the Play Screen.
+- Use the playback controls at the bottom of the screen to play and pause the current selected music playlist, skip to the next track, or go back to the previous track.
+
+#### Atmosphere Selection Panel
+
+While this panel open, the user can:
+- Swipe down from the top to close the panel.
+- Search for an atmosphere loop.
+- Browse atmosphere loops by Theme, Location, or Mood.
+- Select an atmosphere loop to play it immediately.
+- Bookmark up to 7 atmosphere loops, which places them in the "Atmosphere Loops" section on the Play Screen.
+- Use the playback controls at the bottom of the screen to play and pause the current selected music playlist, skip to the next track, or go back to the previous track.

@@ -1,0 +1,12 @@
+Let’s add a new feature, called “QuickPlay”
+
+This feature lets the user instantly search for any asset in their library (playlist, sound effect, atmosphere, etc.).
+
+There are three ways to invoke it:
+1. A keyboard shortcut (opt-⌘-Space)
+2. A menu bar item (File > QuickPlay)
+3. A search field in the Play View toolbar (top of the app)
+
+When activated, the QuickPlay search field instantly gets keyboard focus. Search results appear below the field. Use standard UIKit.
+
+The user can then tap any search result to instantly play it. It of course appears in the appropriate recent or bookmarked section if necessary.

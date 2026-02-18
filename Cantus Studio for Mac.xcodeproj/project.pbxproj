@@ -1,0 +1,774 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 70;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		10B52128D24C46C2A0AC1469 /* CantusApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77493041E1714E3B9A15B46A /* CantusApp.swift */; };
+		2F4B8C6E3D1A47A3B4C7D1E9 /* ImportAssetsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6D8C2B1A5E4C7E9D0A1B2C /* ImportAssetsView.swift */; };
+		33ED0E1E359340DE93C9B3BD /* PlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740CF1EB3B554808A9658946 /* PlayView.swift */; };
+		4C858717C018A61F9A7E0473 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 446E1B601C2AEAB767700FB5 /* ZIPFoundation */; };
+		52332A832F7C462387394EF3 /* PanelComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00ABAA9FBA441729EEECD1C /* PanelComponents.swift */; };
+		59A88273C80C4E55BF2302A8 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DCEFBF8E0764BEE8550F035 /* RootView.swift */; };
+		7A1C9693825847289F522D22 /* AtmospherePanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 855499746C144623A3CFCD3D /* AtmospherePanelView.swift */; };
+		7BBB8865CF369D93DC5CCC71 /* Backend/LibraryExportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22691516460DB89EF690E2E /* Backend/LibraryExportManager.swift */; };
+		908A47CA81C34E81BFEDD046 /* SetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633B03FFD74D4ABAAB6AB6A5 /* SetupView.swift */; };
+		A111DC655ED34C4C9B1A5580 /* PlaylistPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B90C906D877A4EA28231BAD9 /* PlaylistPanelView.swift */; };
+		A1B2C3D4E5F6A7B8C9D0E1F2 /* DocumentPickerHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A6B7C8D9E0F1A2 /* DocumentPickerHost.swift */; };
+		A2B3C4D5E6F7A8B9C0D1E2F3 /* Backend/PremiumStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F6A7B8C9D0E1F2A3 /* Backend/PremiumStore.swift */; };
+		A2B3C4D5E6F7A8B9C0D1E2F4 /* PremiumUpgradeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F6A7B8C9D0E1F2A4 /* PremiumUpgradeView.swift */; };
+		A2B3C4D5E6F7A8B9C0D1E2F5 /* GlassBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F6A7B8C9D0E1F2A5 /* GlassBackground.swift */; };
+		A3B4C5D6E7F8A9B0C1D2E3F4 /* Backend/MusicPlaybackStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C4D5E6F7A8B9C0D1E2F3A4 /* Backend/MusicPlaybackStore.swift */; };
+		C0C0C0C0C0C0C0C0C0C0C0C0 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D0D0D0D0D0D0D0D0D0D0D0 /* SettingsView.swift */; };
+		CC2BE1A94F2B4A9989B7D9C2 /* Cantus/Audio in Resources */ = {isa = PBXBuildFile; fileRef = CC2BE1A84F2B4A9989B7D9C2 /* Cantus/Audio */; };
+		E42BB1952F34E8A700ADA533 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = E42BB1942F34E8A700ADA533 /* GRDB */; };
+		E42BB1992F34E94E00ADA533 /* seed_catalog.json in Resources */ = {isa = PBXBuildFile; fileRef = E42BB1982F34E94E00ADA533 /* seed_catalog.json */; };
+		E42BB1B22F34F00000ADA533 /* Backend/DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42BB1A22F34F00000ADA533 /* Backend/DatabaseManager.swift */; };
+		E42BB1B32F34F00000ADA533 /* Backend/Migrations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42BB1A32F34F00000ADA533 /* Backend/Migrations.swift */; };
+		E42BB1B42F34F00000ADA533 /* Backend/Records.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42BB1A42F34F00000ADA533 /* Backend/Records.swift */; };
+		E42BB1B52F34F00000ADA533 /* Backend/Filters.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42BB1A52F34F00000ADA533 /* Backend/Filters.swift */; };
+		E42BB1B62F34F00000ADA533 /* Backend/Repositories.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42BB1A62F34F00000ADA533 /* Backend/Repositories.swift */; };
+		E42BB1B72F34F00000ADA533 /* Backend/SeedImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42BB1A72F34F00000ADA533 /* Backend/SeedImporter.swift */; };
+		E42BB1B82F34F00000ADA533 /* Backend/PackManifest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42BB1A82F34F00000ADA533 /* Backend/PackManifest.swift */; };
+		E42BB1B92F34F00000ADA533 /* Backend/PackDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42BB1A92F34F00000ADA533 /* Backend/PackDownloadManager.swift */; };
+		E42BB1C12F34F10000ADA533 /* Backend/MusicAuthorizationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42BB1C02F34F10000ADA533 /* Backend/MusicAuthorizationStore.swift */; };
+		E42BB1E12F34F50000ADA533 /* Backend/AudioPlaybackManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42BB1E02F34F50000ADA533 /* Backend/AudioPlaybackManager.swift */; };
+		E47B5BC42F3BD85F0027EF61 /* Cantus.storekit in Resources */ = {isa = PBXBuildFile; fileRef = E47B5BC32F3BD85F0027EF61 /* Cantus.storekit */; };
+		E49817442F3E4DC20016EECE /* Compatibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49817432F3E4DC20016EECE /* Compatibility.swift */; };
+		E49817462F3E6F690016EECE /* Cantus/AppIconManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49817452F3E6F690016EECE /* Cantus/AppIconManager.swift */; };
+		E49817482F3E7B290016EECE /* MenuState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49817472F3E7B290016EECE /* MenuState.swift */; };
+		E498174A2F3E7B340016EECE /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49817492F3E7B340016EECE /* AboutView.swift */; };
+		E4AC128F2F3ED13300186B3B /* Cantus-Icon-SageRose_01a.icon in Resources */ = {isa = PBXBuildFile; fileRef = E4AC128D2F3ED13300186B3B /* Cantus-Icon-SageRose_01a.icon */; };
+		E4AC12902F3ED13300186B3B /* Cantus-Icon-DungeonRed_01a.icon in Resources */ = {isa = PBXBuildFile; fileRef = E4AC128B2F3ED13300186B3B /* Cantus-Icon-DungeonRed_01a.icon */; };
+		E4AC12912F3ED13300186B3B /* Cantus-Icon-ElectricLime_01a.icon in Resources */ = {isa = PBXBuildFile; fileRef = E4AC128C2F3ED13300186B3B /* Cantus-Icon-ElectricLime_01a.icon */; };
+		E4AC12922F3ED13300186B3B /* Cantus-Icon-SoftOrchid_01a.icon in Resources */ = {isa = PBXBuildFile; fileRef = E4AC128E2F3ED13300186B3B /* Cantus-Icon-SoftOrchid_01a.icon */; };
+		E4AC12932F3ED13300186B3B /* Cantus-Icon-Default_01a.icon in Resources */ = {isa = PBXBuildFile; fileRef = E4AC128A2F3ED13300186B3B /* Cantus-Icon-Default_01a.icon */; };
+		E4AC129E2F3ED65100186B3B /* Cantus-Icon-ElectricLime_01a-iOS-Dark-1024x1024@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = E4AC12982F3ED65100186B3B /* Cantus-Icon-ElectricLime_01a-iOS-Dark-1024x1024@1x.png */; };
+		E4AC129F2F3ED65100186B3B /* Cantus-Icon-SageRose_01a-iOS-Default-1024x1024@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = E4AC129B2F3ED65100186B3B /* Cantus-Icon-SageRose_01a-iOS-Default-1024x1024@1x.png */; };
+		E4AC12A02F3ED65100186B3B /* Cantus-Icon-SoftOrchid_01a-iOS-Dark-1024x1024@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = E4AC129C2F3ED65100186B3B /* Cantus-Icon-SoftOrchid_01a-iOS-Dark-1024x1024@1x.png */; };
+		E4AC12A12F3ED65100186B3B /* Cantus-Icon-SoftOrchid_01a-iOS-Default-1024x1024@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = E4AC129D2F3ED65100186B3B /* Cantus-Icon-SoftOrchid_01a-iOS-Default-1024x1024@1x.png */; };
+		E4AC12A22F3ED65100186B3B /* Cantus-Icon-SageRose_01a-iOS-Dark-1024x1024@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = E4AC129A2F3ED65100186B3B /* Cantus-Icon-SageRose_01a-iOS-Dark-1024x1024@1x.png */; };
+		E4AC12A32F3ED65100186B3B /* Cantus-Icon-Default_01a-iOS-Dark-1024x1024@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = E4AC12942F3ED65100186B3B /* Cantus-Icon-Default_01a-iOS-Dark-1024x1024@1x.png */; };
+		E4AC12A42F3ED65100186B3B /* Cantus-Icon-DungeonRed_01a-iOS-Default-1024x1024@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = E4AC12972F3ED65100186B3B /* Cantus-Icon-DungeonRed_01a-iOS-Default-1024x1024@1x.png */; };
+		E4AC12A52F3ED65100186B3B /* Cantus-Icon-Default_01a-iOS-Default-1024x1024@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = E4AC12952F3ED65100186B3B /* Cantus-Icon-Default_01a-iOS-Default-1024x1024@1x.png */; };
+		E4AC12A62F3ED65100186B3B /* Cantus-Icon-ElectricLime_01a-iOS-Default-1024x1024@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = E4AC12992F3ED65100186B3B /* Cantus-Icon-ElectricLime_01a-iOS-Default-1024x1024@1x.png */; };
+		E4AC12A72F3ED65100186B3B /* Cantus-Icon-DungeonRed_01a-iOS-Dark-1024x1024@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = E4AC12962F3ED65100186B3B /* Cantus-Icon-DungeonRed_01a-iOS-Dark-1024x1024@1x.png */; };
+		E4AC12B12F3F000000186B3B /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		E4E717E92F3FB420002903B1 /* MenuControlsContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E717E82F3FB420002903B1 /* MenuControlsContext.swift */; };
+		E521504EEED54F5AA5A457DC /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77BBE952F27F4F5D91D76DE7 /* Theme.swift */; };
+		E8E6F36E1B9A4E3CB2C8B9D1 /* Backend/TagRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D7C9A1E2B3C4D5E8F9012AB /* Backend/TagRepository.swift */; };
+		F23F2B1B9A7B4C1F8E123456 /* Backend/LocalAssetImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23F2B1A9A7B4C1F8E123456 /* Backend/LocalAssetImporter.swift */; };
+		F23F2B1C9A7B4C1F8E123457 /* Backend/LocalPlaylistImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23F2B1D9A7B4C1F8E123458 /* Backend/LocalPlaylistImporter.swift */; };
+		F4E762EA6C2A43719D70C0E4 /* SoundboardPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D809BC040EB64B868DE6F447 /* SoundboardPanelView.swift */; };
+		F59080CEAA87401897581D20 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A158CB895234E8C9FAF04CB /* Models.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		E4AA92212F3F90EC000ACADD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9E00D62E3C4E44C6A17E812C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 707048EFE82B41D69263288E;
+			remoteInfo = Cantus;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		1A158CB895234E8C9FAF04CB /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		3DCEFBF8E0764BEE8550F035 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		633B03FFD74D4ABAAB6AB6A5 /* SetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupView.swift; sourceTree = "<group>"; };
+		6D7C9A1E2B3C4D5E8F9012AB /* Backend/TagRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backend/TagRepository.swift; sourceTree = "<group>"; };
+		740CF1EB3B554808A9658946 /* PlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayView.swift; sourceTree = "<group>"; };
+		77493041E1714E3B9A15B46A /* CantusApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CantusApp.swift; sourceTree = "<group>"; };
+		77BBE952F27F4F5D91D76DE7 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		855499746C144623A3CFCD3D /* AtmospherePanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtmospherePanelView.swift; sourceTree = "<group>"; };
+		86F15C2F7D164465A21D8D3A /* Cantus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cantus.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9F6D8C2B1A5E4C7E9D0A1B2C /* ImportAssetsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportAssetsView.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A6B7C8D9E0F1A2 /* DocumentPickerHost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPickerHost.swift; sourceTree = "<group>"; };
+		B2C3D4E5F6A7B8C9D0E1F2A3 /* Backend/PremiumStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backend/PremiumStore.swift; sourceTree = "<group>"; };
+		B2C3D4E5F6A7B8C9D0E1F2A4 /* PremiumUpgradeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumUpgradeView.swift; sourceTree = "<group>"; };
+		B2C3D4E5F6A7B8C9D0E1F2A5 /* GlassBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassBackground.swift; sourceTree = "<group>"; };
+		B3C4D5E6F7A8B9C0D1E2F3A4 /* Backend/MusicPlaybackStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backend/MusicPlaybackStore.swift; sourceTree = "<group>"; };
+		B90C906D877A4EA28231BAD9 /* PlaylistPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistPanelView.swift; sourceTree = "<group>"; };
+		C955715C2BC243649097A9A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CC2BE1A84F2B4A9989B7D9C2 /* Cantus/Audio */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Cantus/Audio; sourceTree = "<group>"; };
+		D0D0D0D0D0D0D0D0D0D0D0D0 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		D22691516460DB89EF690E2E /* Backend/LibraryExportManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backend/LibraryExportManager.swift; sourceTree = "<group>"; };
+		D809BC040EB64B868DE6F447 /* SoundboardPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundboardPanelView.swift; sourceTree = "<group>"; };
+		E00ABAA9FBA441729EEECD1C /* PanelComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelComponents.swift; sourceTree = "<group>"; };
+		E42BB1982F34E94E00ADA533 /* seed_catalog.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = seed_catalog.json; sourceTree = "<group>"; };
+		E42BB1A22F34F00000ADA533 /* Backend/DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backend/DatabaseManager.swift; sourceTree = "<group>"; };
+		E42BB1A32F34F00000ADA533 /* Backend/Migrations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backend/Migrations.swift; sourceTree = "<group>"; };
+		E42BB1A42F34F00000ADA533 /* Backend/Records.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backend/Records.swift; sourceTree = "<group>"; };
+		E42BB1A52F34F00000ADA533 /* Backend/Filters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backend/Filters.swift; sourceTree = "<group>"; };
+		E42BB1A62F34F00000ADA533 /* Backend/Repositories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backend/Repositories.swift; sourceTree = "<group>"; };
+		E42BB1A72F34F00000ADA533 /* Backend/SeedImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backend/SeedImporter.swift; sourceTree = "<group>"; };
+		E42BB1A82F34F00000ADA533 /* Backend/PackManifest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backend/PackManifest.swift; sourceTree = "<group>"; };
+		E42BB1A92F34F00000ADA533 /* Backend/PackDownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backend/PackDownloadManager.swift; sourceTree = "<group>"; };
+		E42BB1C02F34F10000ADA533 /* Backend/MusicAuthorizationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backend/MusicAuthorizationStore.swift; sourceTree = "<group>"; };
+		E42BB1D12F34F30000ADA533 /* Cantus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Cantus.entitlements; sourceTree = "<group>"; };
+		E42BB1E02F34F50000ADA533 /* Backend/AudioPlaybackManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backend/AudioPlaybackManager.swift; sourceTree = "<group>"; };
+		E47B5BC32F3BD85F0027EF61 /* Cantus.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cantus.storekit; sourceTree = "<group>"; };
+		E49817432F3E4DC20016EECE /* Compatibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Compatibility.swift; sourceTree = "<group>"; };
+		E49817452F3E6F690016EECE /* Cantus/AppIconManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cantus/AppIconManager.swift; sourceTree = "<group>"; };
+		E49817472F3E7B290016EECE /* MenuState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuState.swift; sourceTree = "<group>"; };
+		E49817492F3E7B340016EECE /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
+		E4AA921D2F3F90EC000ACADD /* CantusTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CantusTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4AC128A2F3ED13300186B3B /* Cantus-Icon-Default_01a.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "Cantus-Icon-Default_01a.icon"; sourceTree = "<group>"; };
+		E4AC128B2F3ED13300186B3B /* Cantus-Icon-DungeonRed_01a.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "Cantus-Icon-DungeonRed_01a.icon"; sourceTree = "<group>"; };
+		E4AC128C2F3ED13300186B3B /* Cantus-Icon-ElectricLime_01a.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "Cantus-Icon-ElectricLime_01a.icon"; sourceTree = "<group>"; };
+		E4AC128D2F3ED13300186B3B /* Cantus-Icon-SageRose_01a.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "Cantus-Icon-SageRose_01a.icon"; sourceTree = "<group>"; };
+		E4AC128E2F3ED13300186B3B /* Cantus-Icon-SoftOrchid_01a.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "Cantus-Icon-SoftOrchid_01a.icon"; sourceTree = "<group>"; };
+		E4AC12942F3ED65100186B3B /* Cantus-Icon-Default_01a-iOS-Dark-1024x1024@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Cantus-Icon-Default_01a-iOS-Dark-1024x1024@1x.png"; sourceTree = "<group>"; };
+		E4AC12952F3ED65100186B3B /* Cantus-Icon-Default_01a-iOS-Default-1024x1024@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Cantus-Icon-Default_01a-iOS-Default-1024x1024@1x.png"; sourceTree = "<group>"; };
+		E4AC12962F3ED65100186B3B /* Cantus-Icon-DungeonRed_01a-iOS-Dark-1024x1024@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Cantus-Icon-DungeonRed_01a-iOS-Dark-1024x1024@1x.png"; sourceTree = "<group>"; };
+		E4AC12972F3ED65100186B3B /* Cantus-Icon-DungeonRed_01a-iOS-Default-1024x1024@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Cantus-Icon-DungeonRed_01a-iOS-Default-1024x1024@1x.png"; sourceTree = "<group>"; };
+		E4AC12982F3ED65100186B3B /* Cantus-Icon-ElectricLime_01a-iOS-Dark-1024x1024@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Cantus-Icon-ElectricLime_01a-iOS-Dark-1024x1024@1x.png"; sourceTree = "<group>"; };
+		E4AC12992F3ED65100186B3B /* Cantus-Icon-ElectricLime_01a-iOS-Default-1024x1024@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Cantus-Icon-ElectricLime_01a-iOS-Default-1024x1024@1x.png"; sourceTree = "<group>"; };
+		E4AC129A2F3ED65100186B3B /* Cantus-Icon-SageRose_01a-iOS-Dark-1024x1024@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Cantus-Icon-SageRose_01a-iOS-Dark-1024x1024@1x.png"; sourceTree = "<group>"; };
+		E4AC129B2F3ED65100186B3B /* Cantus-Icon-SageRose_01a-iOS-Default-1024x1024@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Cantus-Icon-SageRose_01a-iOS-Default-1024x1024@1x.png"; sourceTree = "<group>"; };
+		E4AC129C2F3ED65100186B3B /* Cantus-Icon-SoftOrchid_01a-iOS-Dark-1024x1024@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Cantus-Icon-SoftOrchid_01a-iOS-Dark-1024x1024@1x.png"; sourceTree = "<group>"; };
+		E4AC129D2F3ED65100186B3B /* Cantus-Icon-SoftOrchid_01a-iOS-Default-1024x1024@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Cantus-Icon-SoftOrchid_01a-iOS-Default-1024x1024@1x.png"; sourceTree = "<group>"; };
+		E4E717E82F3FB420002903B1 /* MenuControlsContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuControlsContext.swift; sourceTree = "<group>"; };
+		F23F2B1A9A7B4C1F8E123456 /* Backend/LocalAssetImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backend/LocalAssetImporter.swift; sourceTree = "<group>"; };
+		F23F2B1D9A7B4C1F8E123458 /* Backend/LocalPlaylistImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backend/LocalPlaylistImporter.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		E4AA921E2F3F90EC000ACADD /* CantusTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = CantusTests; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		78281434B4C44872833D142A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E4AC12B12F3F000000186B3B /* (null) in Frameworks */,
+				E42BB1952F34E8A700ADA533 /* GRDB in Frameworks */,
+				4C858717C018A61F9A7E0473 /* ZIPFoundation in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E4AA921A2F3F90EC000ACADD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4E407F1DCAB24392A313B92A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				86F15C2F7D164465A21D8D3A /* Cantus.app */,
+				E4AA921D2F3F90EC000ACADD /* CantusTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5AF51E9A28954BF9BCDC75B4 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				CC2BE1A84F2B4A9989B7D9C2 /* Cantus/Audio */,
+				E4AC128A2F3ED13300186B3B /* Cantus-Icon-Default_01a.icon */,
+				E4AC128B2F3ED13300186B3B /* Cantus-Icon-DungeonRed_01a.icon */,
+				E4AC128C2F3ED13300186B3B /* Cantus-Icon-ElectricLime_01a.icon */,
+				E4AC128D2F3ED13300186B3B /* Cantus-Icon-SageRose_01a.icon */,
+				E4AC128E2F3ED13300186B3B /* Cantus-Icon-SoftOrchid_01a.icon */,
+				E4AC12942F3ED65100186B3B /* Cantus-Icon-Default_01a-iOS-Dark-1024x1024@1x.png */,
+				E4AC12952F3ED65100186B3B /* Cantus-Icon-Default_01a-iOS-Default-1024x1024@1x.png */,
+				E4AC12962F3ED65100186B3B /* Cantus-Icon-DungeonRed_01a-iOS-Dark-1024x1024@1x.png */,
+				E4AC12972F3ED65100186B3B /* Cantus-Icon-DungeonRed_01a-iOS-Default-1024x1024@1x.png */,
+				E4AC12982F3ED65100186B3B /* Cantus-Icon-ElectricLime_01a-iOS-Dark-1024x1024@1x.png */,
+				E4AC12992F3ED65100186B3B /* Cantus-Icon-ElectricLime_01a-iOS-Default-1024x1024@1x.png */,
+				E4AC129A2F3ED65100186B3B /* Cantus-Icon-SageRose_01a-iOS-Dark-1024x1024@1x.png */,
+				E4AC129B2F3ED65100186B3B /* Cantus-Icon-SageRose_01a-iOS-Default-1024x1024@1x.png */,
+				E4AC129C2F3ED65100186B3B /* Cantus-Icon-SoftOrchid_01a-iOS-Dark-1024x1024@1x.png */,
+				E4AC129D2F3ED65100186B3B /* Cantus-Icon-SoftOrchid_01a-iOS-Default-1024x1024@1x.png */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		AF90A844C2F04D8B8190478C = {
+			isa = PBXGroup;
+			children = (
+				E47B5BC32F3BD85F0027EF61 /* Cantus.storekit */,
+				D27685FA05AF46E3BE9F37BE /* Cantus */,
+				5AF51E9A28954BF9BCDC75B4 /* Resources */,
+				E4AA921E2F3F90EC000ACADD /* CantusTests */,
+				4E407F1DCAB24392A313B92A /* Products */,
+				E49817432F3E4DC20016EECE /* Compatibility.swift */,
+				E49817452F3E6F690016EECE /* Cantus/AppIconManager.swift */,
+				E49817472F3E7B290016EECE /* MenuState.swift */,
+				E49817492F3E7B340016EECE /* AboutView.swift */,
+			);
+			sourceTree = "<group>";
+		};
+		D27685FA05AF46E3BE9F37BE /* Cantus */ = {
+			isa = PBXGroup;
+			children = (
+				E42BB1A12F34F00000ADA533 /* Backend */,
+				77493041E1714E3B9A15B46A /* CantusApp.swift */,
+				3DCEFBF8E0764BEE8550F035 /* RootView.swift */,
+				D0D0D0D0D0D0D0D0D0D0D0D0 /* SettingsView.swift */,
+				B1C2D3E4F5A6B7C8D9E0F1A2 /* DocumentPickerHost.swift */,
+				B2C3D4E5F6A7B8C9D0E1F2A4 /* PremiumUpgradeView.swift */,
+				B2C3D4E5F6A7B8C9D0E1F2A5 /* GlassBackground.swift */,
+				9F6D8C2B1A5E4C7E9D0A1B2C /* ImportAssetsView.swift */,
+				1A158CB895234E8C9FAF04CB /* Models.swift */,
+				77BBE952F27F4F5D91D76DE7 /* Theme.swift */,
+				E42BB1982F34E94E00ADA533 /* seed_catalog.json */,
+				E42BB1D12F34F30000ADA533 /* Cantus.entitlements */,
+				633B03FFD74D4ABAAB6AB6A5 /* SetupView.swift */,
+				740CF1EB3B554808A9658946 /* PlayView.swift */,
+				E00ABAA9FBA441729EEECD1C /* PanelComponents.swift */,
+				B90C906D877A4EA28231BAD9 /* PlaylistPanelView.swift */,
+				855499746C144623A3CFCD3D /* AtmospherePanelView.swift */,
+				D809BC040EB64B868DE6F447 /* SoundboardPanelView.swift */,
+				C955715C2BC243649097A9A3 /* Info.plist */,
+				E4E717E82F3FB420002903B1 /* MenuControlsContext.swift */,
+			);
+			path = Cantus;
+			sourceTree = "<group>";
+		};
+		E42BB1A12F34F00000ADA533 /* Backend */ = {
+			isa = PBXGroup;
+			children = (
+				E42BB1A22F34F00000ADA533 /* Backend/DatabaseManager.swift */,
+				E42BB1A32F34F00000ADA533 /* Backend/Migrations.swift */,
+				E42BB1A42F34F00000ADA533 /* Backend/Records.swift */,
+				E42BB1A52F34F00000ADA533 /* Backend/Filters.swift */,
+				E42BB1A62F34F00000ADA533 /* Backend/Repositories.swift */,
+				D22691516460DB89EF690E2E /* Backend/LibraryExportManager.swift */,
+				B2C3D4E5F6A7B8C9D0E1F2A3 /* Backend/PremiumStore.swift */,
+				B3C4D5E6F7A8B9C0D1E2F3A4 /* Backend/MusicPlaybackStore.swift */,
+				6D7C9A1E2B3C4D5E8F9012AB /* Backend/TagRepository.swift */,
+				F23F2B1A9A7B4C1F8E123456 /* Backend/LocalAssetImporter.swift */,
+				F23F2B1D9A7B4C1F8E123458 /* Backend/LocalPlaylistImporter.swift */,
+				E42BB1A72F34F00000ADA533 /* Backend/SeedImporter.swift */,
+				E42BB1A82F34F00000ADA533 /* Backend/PackManifest.swift */,
+				E42BB1A92F34F00000ADA533 /* Backend/PackDownloadManager.swift */,
+				E42BB1C02F34F10000ADA533 /* Backend/MusicAuthorizationStore.swift */,
+				E42BB1E02F34F50000ADA533 /* Backend/AudioPlaybackManager.swift */,
+			);
+			name = Backend;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		707048EFE82B41D69263288E /* Cantus */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BCD33FC29C534464A4EEA388 /* Build configuration list for PBXNativeTarget "Cantus" */;
+			buildPhases = (
+				744DE471B06C4CBEB184B01E /* Sources */,
+				78281434B4C44872833D142A /* Frameworks */,
+				17598736CE2840248FE01DE4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Cantus;
+			packageProductDependencies = (
+				E42BB1942F34E8A700ADA533 /* GRDB */,
+				446E1B601C2AEAB767700FB5 /* ZIPFoundation */,
+			);
+			productName = Cantus;
+			productReference = 86F15C2F7D164465A21D8D3A /* Cantus.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E4AA921C2F3F90EC000ACADD /* CantusTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E4AA92232F3F90EC000ACADD /* Build configuration list for PBXNativeTarget "CantusTests" */;
+			buildPhases = (
+				E4AA92192F3F90EC000ACADD /* Sources */,
+				E4AA921A2F3F90EC000ACADD /* Frameworks */,
+				E4AA921B2F3F90EC000ACADD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E4AA92222F3F90EC000ACADD /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				E4AA921E2F3F90EC000ACADD /* CantusTests */,
+			);
+			name = CantusTests;
+			packageProductDependencies = (
+			);
+			productName = CantusTests;
+			productReference = E4AA921D2F3F90EC000ACADD /* CantusTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		9E00D62E3C4E44C6A17E812C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastSwiftUpdateCheck = 2630;
+				LastUpgradeCheck = 2630;
+				TargetAttributes = {
+					E4AA921C2F3F90EC000ACADD = {
+						CreatedOnToolsVersion = 26.3;
+						TestTargetID = 707048EFE82B41D69263288E;
+					};
+				};
+			};
+			buildConfigurationList = 13FA5A26DBC543B4978E1FC6 /* Build configuration list for PBXProject "Cantus" */;
+			compatibilityVersion = "Xcode 15.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = AF90A844C2F04D8B8190478C;
+			packageReferences = (
+				E42BB1932F34E8A700ADA533 /* XCRemoteSwiftPackageReference "GRDB" */,
+				17743179D36AFF67FE8862D4 /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
+			);
+			productRefGroup = 4E407F1DCAB24392A313B92A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				707048EFE82B41D69263288E /* Cantus */,
+				E4AA921C2F3F90EC000ACADD /* CantusTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		17598736CE2840248FE01DE4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E47B5BC42F3BD85F0027EF61 /* Cantus.storekit in Resources */,
+				E42BB1992F34E94E00ADA533 /* seed_catalog.json in Resources */,
+				E4AC129E2F3ED65100186B3B /* Cantus-Icon-ElectricLime_01a-iOS-Dark-1024x1024@1x.png in Resources */,
+				E4AC129F2F3ED65100186B3B /* Cantus-Icon-SageRose_01a-iOS-Default-1024x1024@1x.png in Resources */,
+				E4AC12A02F3ED65100186B3B /* Cantus-Icon-SoftOrchid_01a-iOS-Dark-1024x1024@1x.png in Resources */,
+				E4AC12A12F3ED65100186B3B /* Cantus-Icon-SoftOrchid_01a-iOS-Default-1024x1024@1x.png in Resources */,
+				E4AC12A22F3ED65100186B3B /* Cantus-Icon-SageRose_01a-iOS-Dark-1024x1024@1x.png in Resources */,
+				E4AC12A32F3ED65100186B3B /* Cantus-Icon-Default_01a-iOS-Dark-1024x1024@1x.png in Resources */,
+				E4AC12A42F3ED65100186B3B /* Cantus-Icon-DungeonRed_01a-iOS-Default-1024x1024@1x.png in Resources */,
+				E4AC12A52F3ED65100186B3B /* Cantus-Icon-Default_01a-iOS-Default-1024x1024@1x.png in Resources */,
+				E4AC12A62F3ED65100186B3B /* Cantus-Icon-ElectricLime_01a-iOS-Default-1024x1024@1x.png in Resources */,
+				E4AC12A72F3ED65100186B3B /* Cantus-Icon-DungeonRed_01a-iOS-Dark-1024x1024@1x.png in Resources */,
+				CC2BE1A94F2B4A9989B7D9C2 /* Cantus/Audio in Resources */,
+				E4AC128F2F3ED13300186B3B /* Cantus-Icon-SageRose_01a.icon in Resources */,
+				E4AC12902F3ED13300186B3B /* Cantus-Icon-DungeonRed_01a.icon in Resources */,
+				E4AC12912F3ED13300186B3B /* Cantus-Icon-ElectricLime_01a.icon in Resources */,
+				E4AC12922F3ED13300186B3B /* Cantus-Icon-SoftOrchid_01a.icon in Resources */,
+				E4AC12932F3ED13300186B3B /* Cantus-Icon-Default_01a.icon in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E4AA921B2F3F90EC000ACADD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		744DE471B06C4CBEB184B01E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E42BB1C12F34F10000ADA533 /* Backend/MusicAuthorizationStore.swift in Sources */,
+				E42BB1E12F34F50000ADA533 /* Backend/AudioPlaybackManager.swift in Sources */,
+				E42BB1B22F34F00000ADA533 /* Backend/DatabaseManager.swift in Sources */,
+				E42BB1B32F34F00000ADA533 /* Backend/Migrations.swift in Sources */,
+				E42BB1B42F34F00000ADA533 /* Backend/Records.swift in Sources */,
+				E42BB1B52F34F00000ADA533 /* Backend/Filters.swift in Sources */,
+				E42BB1B62F34F00000ADA533 /* Backend/Repositories.swift in Sources */,
+				E49817462F3E6F690016EECE /* Cantus/AppIconManager.swift in Sources */,
+				7BBB8865CF369D93DC5CCC71 /* Backend/LibraryExportManager.swift in Sources */,
+				E49817442F3E4DC20016EECE /* Compatibility.swift in Sources */,
+				E8E6F36E1B9A4E3CB2C8B9D1 /* Backend/TagRepository.swift in Sources */,
+				F23F2B1B9A7B4C1F8E123456 /* Backend/LocalAssetImporter.swift in Sources */,
+				F23F2B1C9A7B4C1F8E123457 /* Backend/LocalPlaylistImporter.swift in Sources */,
+				E42BB1B72F34F00000ADA533 /* Backend/SeedImporter.swift in Sources */,
+				E49817482F3E7B290016EECE /* MenuState.swift in Sources */,
+				E42BB1B82F34F00000ADA533 /* Backend/PackManifest.swift in Sources */,
+				E42BB1B92F34F00000ADA533 /* Backend/PackDownloadManager.swift in Sources */,
+				10B52128D24C46C2A0AC1469 /* CantusApp.swift in Sources */,
+				59A88273C80C4E55BF2302A8 /* RootView.swift in Sources */,
+				C0C0C0C0C0C0C0C0C0C0C0C0 /* SettingsView.swift in Sources */,
+				A1B2C3D4E5F6A7B8C9D0E1F2 /* DocumentPickerHost.swift in Sources */,
+				A2B3C4D5E6F7A8B9C0D1E2F3 /* Backend/PremiumStore.swift in Sources */,
+				A2B3C4D5E6F7A8B9C0D1E2F4 /* PremiumUpgradeView.swift in Sources */,
+				A2B3C4D5E6F7A8B9C0D1E2F5 /* GlassBackground.swift in Sources */,
+				A3B4C5D6E7F8A9B0C1D2E3F4 /* Backend/MusicPlaybackStore.swift in Sources */,
+				F59080CEAA87401897581D20 /* Models.swift in Sources */,
+				E521504EEED54F5AA5A457DC /* Theme.swift in Sources */,
+				908A47CA81C34E81BFEDD046 /* SetupView.swift in Sources */,
+				33ED0E1E359340DE93C9B3BD /* PlayView.swift in Sources */,
+				E498174A2F3E7B340016EECE /* AboutView.swift in Sources */,
+				E4E717E92F3FB420002903B1 /* MenuControlsContext.swift in Sources */,
+				2F4B8C6E3D1A47A3B4C7D1E9 /* ImportAssetsView.swift in Sources */,
+				52332A832F7C462387394EF3 /* PanelComponents.swift in Sources */,
+				A111DC655ED34C4C9B1A5580 /* PlaylistPanelView.swift in Sources */,
+				7A1C9693825847289F522D22 /* AtmospherePanelView.swift in Sources */,
+				F4E762EA6C2A43719D70C0E4 /* SoundboardPanelView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E4AA92192F3F90EC000ACADD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E4AA92222F3F90EC000ACADD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 707048EFE82B41D69263288E /* Cantus */;
+			targetProxy = E4AA92212F3F90EC000ACADD /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		023DD64FA848423CBFD3D369 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Cantus-Icon-DungeonRed_01a Cantus-Icon-SageRose_01a Cantus-Icon-ElectricLime_01a Cantus-Icon-SoftOrchid_01a";
+				ASSETCATALOG_COMPILER_APPICON_NAME = "Cantus-Icon-Default_01a";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Cantus/Cantus.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 4;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = 5K24D8F6YV;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = Cantus/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.role-playing-games";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 0.9.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.varrowindstudios.cantus;
+				PRODUCT_NAME = Cantus;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				REGISTER_APP_GROUPS = YES;
+				SUPPORTED_PLATFORMS = macosx;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		A61195283B9248A68C9397E3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Cantus-Icon-DungeonRed_01a Cantus-Icon-SageRose_01a Cantus-Icon-ElectricLime_01a Cantus-Icon-SoftOrchid_01a";
+				ASSETCATALOG_COMPILER_APPICON_NAME = "Cantus-Icon-Default_01a";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Cantus/Cantus.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMPILER_INDEX_STORE_ENABLE = NO;
+				CURRENT_PROJECT_VERSION = 4;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = 5K24D8F6YV;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = Cantus/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.role-playing-games";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 0.9.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.varrowindstudios.cantus;
+				PRODUCT_NAME = Cantus;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				REGISTER_APP_GROUPS = YES;
+				SUPPORTED_PLATFORMS = macosx;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ENABLE_EXPLICIT_MODULES = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		E4AA92242F3F90EC000ACADD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 5K24D8F6YV;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = varrowindstudios.CantusTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = macosx;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Cantus.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Cantus";
+			};
+			name = Debug;
+		};
+		E4AA92252F3F90EC000ACADD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 5K24D8F6YV;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = varrowindstudios.CantusTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = macosx;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Cantus.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Cantus";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		F02C8D227BAE42DCBC879E4C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMPILER_INDEX_STORE_ENABLE = NO;
+				CURRENT_PROJECT_VERSION = 0.30;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = 5K24D8F6YV;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Cantus/Info.plist;
+				MARKETING_VERSION = 1.0;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.varrowindstudios.cantus;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ENABLE_EXPLICIT_MODULES = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		F9A0F39D46FC4CC79FDA9D38 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = 5K24D8F6YV;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Cantus/Info.plist;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.varrowindstudios.cantus;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		13FA5A26DBC543B4978E1FC6 /* Build configuration list for PBXProject "Cantus" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F02C8D227BAE42DCBC879E4C /* Debug */,
+				F9A0F39D46FC4CC79FDA9D38 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		BCD33FC29C534464A4EEA388 /* Build configuration list for PBXNativeTarget "Cantus" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A61195283B9248A68C9397E3 /* Debug */,
+				023DD64FA848423CBFD3D369 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		E4AA92232F3F90EC000ACADD /* Build configuration list for PBXNativeTarget "CantusTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E4AA92242F3F90EC000ACADD /* Debug */,
+				E4AA92252F3F90EC000ACADD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		17743179D36AFF67FE8862D4 /* XCRemoteSwiftPackageReference "ZIPFoundation" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/weichsel/ZIPFoundation";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.9.0;
+			};
+		};
+		E42BB1932F34E8A700ADA533 /* XCRemoteSwiftPackageReference "GRDB" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/groue/GRDB.swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		446E1B601C2AEAB767700FB5 /* ZIPFoundation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 17743179D36AFF67FE8862D4 /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
+			productName = ZIPFoundation;
+		};
+		E42BB1942F34E8A700ADA533 /* GRDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E42BB1932F34E8A700ADA533 /* XCRemoteSwiftPackageReference "GRDB" */;
+			productName = GRDB;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 9E00D62E3C4E44C6A17E812C /* Project object */;
+}
