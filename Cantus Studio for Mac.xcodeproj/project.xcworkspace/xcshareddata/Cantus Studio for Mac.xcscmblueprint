@@ -1,0 +1,23 @@
+{
+  DVTSourceControlWorkspaceBlueprintIdentifierKey = "88A2AFC6-138C-4E4D-933E-49D017054C33";
+  DVTSourceControlWorkspaceBlueprintNameKey = "Cantus Studio for Mac";
+  DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey = "CD6714EC799641D42BF1852B53533BEE94C06F2D";
+  DVTSourceControlWorkspaceBlueprintPrimaryRepositoryRelativePathKey = "";
+  DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey = "Cantus Studio for Mac.xcodeproj";
+  DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey = (
+    {
+      DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey = "CD6714EC799641D42BF1852B53533BEE94C06F2D";
+      DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey = "com.apple.dt.Xcode.sourcecontrol.Git";
+      DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey = "https://github.com/varrowindstudios/cantus-studio-for-mac.git";
+    }
+  );
+  DVTSourceControlWorkspaceBlueprintVersion = 204;
+  DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey = {
+  };
+  DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryPathsKey = {
+    CD6714EC799641D42BF1852B53533BEE94C06F2D = "";
+  };
+  DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey = {
+    CD6714EC799641D42BF1852B53533BEE94C06F2D = 9223372036854775807;
+  };
+}
