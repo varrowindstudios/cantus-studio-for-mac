@@ -151,7 +151,7 @@ struct CantusApp: App {
                 )
             )
         }
-        .defaultSize(width: 760, height: 820)
+        .defaultSize(width: 480, height: 660)
         .windowStyle(.automatic)
         .windowToolbarStyle(.automatic)
 
@@ -294,6 +294,7 @@ struct CantusApp: App {
 
 @available(iOS 18.0, *)
 private struct AddPlaylistWindowRoot: View {
+    let initialTab: PlaylistAddSheetView.Tab
     @State private var preferredTab: PlaylistAddSheetView.Tab
     @EnvironmentObject private var theme: ThemeModel
     @EnvironmentObject private var backend: AppBackend
@@ -303,6 +304,7 @@ private struct AddPlaylistWindowRoot: View {
     @EnvironmentObject private var menuState: AppMenuState
 
     init(initialTab: PlaylistAddSheetView.Tab) {
+        self.initialTab = initialTab
         _preferredTab = State(initialValue: initialTab)
     }
 
@@ -316,13 +318,36 @@ private struct AddPlaylistWindowRoot: View {
                 LibraryChangeNotifier.notify()
             },
             preferredTab: $preferredTab,
-            showsTypeChooserInitially: true
+            showsTypeChooserInitially: false
         )
         .environmentObject(theme)
         .environmentObject(premium)
         .environmentObject(backend)
         .environmentObject(bookmarks)
         .environmentObject(playback)
+        .onAppear {
+            if preferredTab != initialTab {
+                preferredTab = initialTab
+            }
+            if menuState.addPlaylistPreferredTab != preferredTab {
+                menuState.addPlaylistPreferredTab = preferredTab
+            }
+        }
+        .onChange(of: initialTab) { _, newValue in
+            if preferredTab != newValue {
+                preferredTab = newValue
+            }
+        }
+        .onChange(of: menuState.addPlaylistPreferredTab) { _, newValue in
+            if preferredTab != newValue {
+                preferredTab = newValue
+            }
+        }
+        .onChange(of: preferredTab) { _, newValue in
+            if menuState.addPlaylistPreferredTab != newValue {
+                menuState.addPlaylistPreferredTab = newValue
+            }
+        }
     }
 }
 
