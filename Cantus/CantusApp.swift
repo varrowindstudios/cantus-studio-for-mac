@@ -53,6 +53,7 @@ struct CantusApp: App {
         WindowGroup {
             withSharedEnvironment(
                 RootView(hasCompletedSetup: $hasCompletedSetup)
+                    .frame(minWidth: 384)
                     .preferredColorScheme(.dark)
                     .task {
                         backend.audioManager.prewarmAudioSession()
@@ -78,7 +79,8 @@ struct CantusApp: App {
                     }
             )
         }
-        .defaultSize(width: 1320, height: 860)
+        .defaultSize(width: 1365, height: 1104)
+        .windowResizability(.contentMinSize)
         .windowStyle(.automatic)
         .windowToolbarStyle(.automatic)
         .commands {
@@ -99,7 +101,7 @@ struct CantusApp: App {
                 SettingsView()
             )
         }
-        .defaultSize(width: 860, height: 760)
+        .defaultSize(width: 480, height: 660)
         .windowStyle(.automatic)
         .windowToolbarStyle(.automatic)
 
@@ -108,7 +110,7 @@ struct CantusApp: App {
                 PlaylistPanelView(initialFilter: payload.wrappedValue?.initialFilter)
             )
         }
-        .defaultSize(width: 760, height: 820)
+        .defaultSize(width: 480, height: 660)
         .windowStyle(.automatic)
         .windowToolbarStyle(.automatic)
 
@@ -117,7 +119,7 @@ struct CantusApp: App {
                 AtmospherePanelView()
             )
         }
-        .defaultSize(width: 720, height: 820)
+        .defaultSize(width: 480, height: 660)
         .windowStyle(.automatic)
         .windowToolbarStyle(.automatic)
 
@@ -126,7 +128,7 @@ struct CantusApp: App {
                 SoundboardPanelView()
             )
         }
-        .defaultSize(width: 720, height: 820)
+        .defaultSize(width: 480, height: 660)
         .windowStyle(.automatic)
         .windowToolbarStyle(.automatic)
 
@@ -138,7 +140,7 @@ struct CantusApp: App {
                 )
             )
         }
-        .defaultSize(width: 700, height: 780)
+        .defaultSize(width: 480, height: 660)
         .windowStyle(.automatic)
         .windowToolbarStyle(.automatic)
 

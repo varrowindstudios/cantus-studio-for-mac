@@ -129,6 +129,7 @@ final class MusicPlaybackStore: ObservableObject {
     private let stateRefreshInterval: TimeInterval = 1.0
     private let progressPublishInterval: TimeInterval = 0.2
     private var localMusicVolume: Float = 1.0
+    private var masterVolume: Float = 1.0
     private var localMusicDuckingMultiplier: Float = 1.0
     private let sfxDuckingFactor: Float = 0.55
     private let localDuckingRampDuration: TimeInterval = 0.24
@@ -190,12 +191,18 @@ final class MusicPlaybackStore: ObservableObject {
     }
 
     private var effectiveLocalMusicVolume: Float {
-        localMusicVolume * localMusicDuckingMultiplier
+        localMusicVolume * localMusicDuckingMultiplier * masterVolume
     }
 
     func setMusicVolume(_ volume: Double) {
         let clamped = Float(min(max(volume, 0), 1))
         localMusicVolume = clamped
+        applyEffectiveLocalMusicVolume()
+    }
+
+    func setMasterVolume(_ volume: Double) {
+        let clamped = Float(min(max(volume, 0), 1))
+        masterVolume = clamped
         applyEffectiveLocalMusicVolume()
     }
 

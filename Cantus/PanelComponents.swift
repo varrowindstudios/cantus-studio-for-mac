@@ -1,4 +1,7 @@
 import SwiftUI
+#if os(macOS)
+import AppKit
+#endif
 
 @available(iOS 18.0, *)
 struct PanelShell<TrailingToolbar: View, Content: View>: View {
@@ -11,7 +14,6 @@ struct PanelShell<TrailingToolbar: View, Content: View>: View {
     let content: Content
 
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.colorScheme) private var colorScheme
 
     init(
         title: String,
@@ -48,40 +50,40 @@ struct PanelShell<TrailingToolbar: View, Content: View>: View {
         self.content = content()
     }
 
-    private var unselectedTabColor: Color {
-        colorScheme == .light ? Color.primary.opacity(0.7) : Color.primary
-    }
-
     var body: some View {
         NavigationStack {
-            List {
-                Section {
-                    VStack(spacing: 8) {
-                        SearchField(text: $searchText, prompt: searchPlaceholder)
+            VStack(spacing: 10) {
+                VStack(spacing: 10) {
+                    HStack {
+                        Spacer(minLength: 0)
+                        PanelSearchField(text: $searchText, prompt: searchPlaceholder)
+                            .frame(maxWidth: 500)
+                        Spacer(minLength: 0)
+                    }
 
-                        if !tabs.isEmpty {
-                            Picker("Category", selection: $selectedTab) {
-                            ForEach(tabs.indices, id: \.self) { index in
-                                let isSelected = index == selectedTab
-                                Text(tabs[index])
-                                    .font(.body)
-                                    .foregroundStyle(isSelected ? .primary : unselectedTabColor)
-                                    .tag(index)
-                            }
-                        }
-                            .pickerStyle(.segmented)
-                            .tint(.primary)
-                            .cantusGlassEffectClear(in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                    if !tabs.isEmpty {
+                        HStack {
+                            Spacer(minLength: 0)
+                            PanelTabSelector(tabs: tabs, selectedTab: $selectedTab)
+                            .frame(maxWidth: 460)
+                            Spacer(minLength: 0)
                         }
                     }
                 }
-                .listRowBackground(Color.clear)
+                .padding(.horizontal, 16)
+                .padding(.top, 10)
 
-                Section {
+                List {
                     content
                 }
+                #if os(iOS)
+                .cantusInsetGroupedListStyle()
+                #else
+                .listStyle(.plain)
+                .scrollContentBackground(.hidden)
+                .environment(\.defaultMinListRowHeight, 42)
+                #endif
             }
-            .cantusInsetGroupedListStyle()
             .navigationTitle(title)
             .toolbar {
 #if os(iOS)
@@ -89,17 +91,17 @@ struct PanelShell<TrailingToolbar: View, Content: View>: View {
                     ToolbarIconButton(systemName: "xmark", action: { dismiss() }, accessibilityLabel: "Close")
                 }
 #endif
-        if let trailingToolbar {
+                if let trailingToolbar {
 #if os(iOS)
-            ToolbarItem(placement: .navigationBarTrailing) {
-                trailingToolbar
-            }
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        trailingToolbar
+                    }
 #else
-            ToolbarItem(placement: .automatic) {
-                trailingToolbar
-            }
+                    ToolbarItem(placement: .automatic) {
+                        trailingToolbar
+                    }
 #endif
-        }
+                }
             }
         }
 #if os(iOS)
@@ -111,44 +113,174 @@ struct PanelShell<TrailingToolbar: View, Content: View>: View {
 }
 
 @available(iOS 18.0, *)
-private struct SearchField: View {
+private struct PanelSearchField: View {
     @Binding var text: String
     let prompt: String
 
     var body: some View {
-        HStack(spacing: 8) {
-            Image(systemName: "magnifyingglass")
-                .foregroundStyle(.secondary)
-            TextField(prompt, text: $text)
-                .cantusTextInputAutocapitalization(.never)
-                .textFieldStyle(.plain)
-        }
-        .padding(.horizontal, 12)
-        .frame(height: 36)
-        .cantusGlassEffectClear(in: Capsule())
+#if os(macOS)
+        AppKitSearchField(text: $text, prompt: prompt)
+            .frame(height: 40)
+#else
+        TextField(prompt, text: $text)
+            .textFieldStyle(.roundedBorder)
+            .cantusTextInputAutocapitalization(.never)
+#endif
     }
 }
+
+@available(iOS 18.0, *)
+private struct PanelTabSelector: View {
+    let tabs: [String]
+    @Binding var selectedTab: Int
+
+    var body: some View {
+#if os(macOS)
+        AppKitSegmentedTabSelector(tabs: tabs, selectedTab: $selectedTab)
+            .frame(height: 34)
+#else
+        Picker("", selection: $selectedTab) {
+            ForEach(tabs.indices, id: \.self) { index in
+                Text(tabs[index]).tag(index)
+            }
+        }
+        .pickerStyle(.segmented)
+        .labelsHidden()
+#endif
+    }
+}
+
+#if os(macOS)
+@available(iOS 18.0, *)
+private struct AppKitSegmentedTabSelector: NSViewRepresentable {
+    let tabs: [String]
+    @Binding var selectedTab: Int
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(selectedTab: $selectedTab)
+    }
+
+    func makeNSView(context: Context) -> NSSegmentedControl {
+        let control = NSSegmentedControl(labels: tabs, trackingMode: .selectOne, target: context.coordinator, action: #selector(Coordinator.selectionChanged(_:)))
+        control.segmentStyle = .automatic
+        control.controlSize = .large
+        control.segmentDistribution = .fillEqually
+        control.selectedSegment = min(max(selectedTab, 0), max(0, tabs.count - 1))
+        return control
+    }
+
+    func updateNSView(_ nsView: NSSegmentedControl, context: Context) {
+        context.coordinator.selectedTab = $selectedTab
+        if nsView.segmentCount != tabs.count {
+            nsView.segmentCount = tabs.count
+        }
+        for (index, label) in tabs.enumerated() {
+            if nsView.label(forSegment: index) != label {
+                nsView.setLabel(label, forSegment: index)
+            }
+        }
+        nsView.segmentDistribution = .fillEqually
+        let clamped = min(max(selectedTab, 0), max(0, tabs.count - 1))
+        if nsView.selectedSegment != clamped {
+            nsView.selectedSegment = clamped
+        }
+    }
+
+    final class Coordinator: NSObject {
+        var selectedTab: Binding<Int>
+
+        init(selectedTab: Binding<Int>) {
+            self.selectedTab = selectedTab
+        }
+
+        @objc
+        func selectionChanged(_ sender: NSSegmentedControl) {
+            let index = sender.selectedSegment
+            guard index != -1 else { return }
+            if selectedTab.wrappedValue != index {
+                selectedTab.wrappedValue = index
+            }
+        }
+    }
+}
+
+@available(iOS 18.0, *)
+private struct AppKitSearchField: NSViewRepresentable {
+    @Binding var text: String
+    let prompt: String
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(text: $text)
+    }
+
+    func makeNSView(context: Context) -> NSSearchField {
+        let field = NSSearchField(frame: .zero)
+        field.controlSize = .large
+        field.bezelStyle = .roundedBezel
+        field.placeholderString = prompt
+        field.delegate = context.coordinator
+        if let cell = field.cell as? NSSearchFieldCell {
+            cell.sendsSearchStringImmediately = true
+            cell.sendsWholeSearchString = false
+        }
+        return field
+    }
+
+    func updateNSView(_ nsView: NSSearchField, context: Context) {
+        if nsView.stringValue != text {
+            nsView.stringValue = text
+        }
+        if nsView.placeholderString != prompt {
+            nsView.placeholderString = prompt
+        }
+    }
+
+    final class Coordinator: NSObject, NSSearchFieldDelegate {
+        @Binding private var text: String
+
+        init(text: Binding<String>) {
+            self._text = text
+        }
+
+        func controlTextDidChange(_ notification: Notification) {
+            guard let field = notification.object as? NSSearchField else { return }
+            text = field.stringValue
+        }
+    }
+}
+#endif
 
 @available(iOS 18.0, *)
 struct ToolbarIconButton: View {
     let systemName: String
     let action: () -> Void
     var size: CGFloat = 34
+    var hitTargetSize: CGFloat? = nil
     var iconScale: CGFloat = 1.0
+    var iconVerticalOffset: CGFloat = 0
     var accessibilityLabel: String? = nil
     @State private var isHovered = false
     @EnvironmentObject private var theme: ThemeModel
 
+    private var resolvedHitTargetSize: CGFloat {
+        max(size, hitTargetSize ?? size)
+    }
+
+    private var resolvedSymbolSize: CGFloat {
+        max(15, size * 0.52)
+    }
+
     var body: some View {
         Button(action: action) {
             Image(systemName: systemName)
-                .frame(width: size, height: size)
+                .font(.system(size: resolvedSymbolSize, weight: .semibold))
                 .scaleEffect(isHovered ? iconScale * 1.15 : iconScale)
+                .offset(y: iconVerticalOffset)
+                .foregroundStyle(iconTint)
+            .frame(width: resolvedHitTargetSize, height: resolvedHitTargetSize)
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .foregroundStyle(iconTint)
-        .contentShape(Circle())
-        .background(Circle().fill(Color.clear).frame(width: size, height: size))
         .onHover { hovering in
             withAnimation(.easeInOut(duration: 0.18)) {
                 isHovered = hovering

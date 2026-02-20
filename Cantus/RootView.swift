@@ -1,5 +1,8 @@
 import SwiftUI
 import UniformTypeIdentifiers
+#if os(macOS)
+import AppKit
+#endif
 
 @available(iOS 18.0, *)
 struct RootView: View {
@@ -18,6 +21,20 @@ struct RootView: View {
                 NavigationStack {
                     PlayView(hasCompletedSetup: $hasCompletedSetup)
                 }
+#if os(macOS)
+                .frame(minHeight: 600)
+#endif
+#if os(macOS)
+                .background(
+                    MainPlayWindowToolbarConfigurator(
+                        onOpenSettings: { menuState.presentSettings() },
+                        onNewLocalPlaylist: { menuState.presentAddPlaylist(preferredTab: .local) },
+                        onAddAppleMusicPlaylist: { menuState.presentAddPlaylist(preferredTab: .appleMusic) },
+                        onImportAtmosphere: { menuState.presentImport(initialKind: .atmosphere) },
+                        onImportSoundEffect: { menuState.presentImport(initialKind: .sfx) }
+                    )
+                )
+#endif
             } else {
                 SetupView(hasCompletedSetup: $hasCompletedSetup)
             }
@@ -190,3 +207,191 @@ struct RootView: View {
         menuState.showAddPlaylistSheet = false
     }
 }
+
+#if os(macOS)
+private struct MainPlayWindowToolbarConfigurator: NSViewRepresentable {
+    let onOpenSettings: () -> Void
+    let onNewLocalPlaylist: () -> Void
+    let onAddAppleMusicPlaylist: () -> Void
+    let onImportAtmosphere: () -> Void
+    let onImportSoundEffect: () -> Void
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator()
+    }
+
+    func makeNSView(context: Context) -> NSView {
+        NSView(frame: .zero)
+    }
+
+    func updateNSView(_ nsView: NSView, context: Context) {
+        context.coordinator.onOpenSettings = onOpenSettings
+        context.coordinator.onNewLocalPlaylist = onNewLocalPlaylist
+        context.coordinator.onAddAppleMusicPlaylist = onAddAppleMusicPlaylist
+        context.coordinator.onImportAtmosphere = onImportAtmosphere
+        context.coordinator.onImportSoundEffect = onImportSoundEffect
+
+        DispatchQueue.main.async { [weak coordinator = context.coordinator] in
+            coordinator?.attach(to: nsView.window)
+        }
+    }
+
+    final class Coordinator: NSObject, NSToolbarDelegate {
+        var onOpenSettings: (() -> Void)?
+        var onNewLocalPlaylist: (() -> Void)?
+        var onAddAppleMusicPlaylist: (() -> Void)?
+        var onImportAtmosphere: (() -> Void)?
+        var onImportSoundEffect: (() -> Void)?
+
+        private weak var attachedWindow: NSWindow?
+        private let toolbarIdentifier = NSToolbar.Identifier("cantus.main.play.window.toolbar")
+        private let settingsIdentifier = NSToolbarItem.Identifier("cantus.main.play.window.toolbar.settings")
+        private let addIdentifier = NSToolbarItem.Identifier("cantus.main.play.window.toolbar.add")
+
+        func attach(to window: NSWindow?) {
+            guard let window else { return }
+
+            if attachedWindow !== window || window.toolbar?.identifier != toolbarIdentifier {
+                let toolbar = NSToolbar(identifier: toolbarIdentifier)
+                toolbar.delegate = self
+                toolbar.displayMode = .iconOnly
+                toolbar.allowsUserCustomization = false
+                toolbar.autosavesConfiguration = false
+                window.toolbar = toolbar
+                attachedWindow = window
+            } else {
+                window.toolbar?.delegate = self
+            }
+
+            if window.titleVisibility != .hidden {
+                window.titleVisibility = .hidden
+            }
+        }
+
+        func toolbarAllowedItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
+            [settingsIdentifier, .flexibleSpace, addIdentifier]
+        }
+
+        func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
+            [settingsIdentifier, .flexibleSpace, addIdentifier]
+        }
+
+        func toolbar(
+            _ toolbar: NSToolbar,
+            itemForItemIdentifier itemIdentifier: NSToolbarItem.Identifier,
+            willBeInsertedIntoToolbar flag: Bool
+        ) -> NSToolbarItem? {
+            switch itemIdentifier {
+            case settingsIdentifier:
+                return makeSettingsItem()
+            case addIdentifier:
+                return makeAddMenuItem()
+            default:
+                return nil
+            }
+        }
+
+        private func makeSettingsItem() -> NSToolbarItem {
+            let item = NSToolbarItem(itemIdentifier: settingsIdentifier)
+            item.label = "Settings"
+            item.paletteLabel = "Settings"
+            item.toolTip = "Settings"
+            item.image = NSImage(systemSymbolName: "gearshape", accessibilityDescription: "Settings")
+            item.target = self
+            item.action = #selector(handleOpenSettings)
+            return item
+        }
+
+        private func makeAddMenuItem() -> NSToolbarItem {
+            if #available(macOS 11.0, *) {
+                let item = NSMenuToolbarItem(itemIdentifier: addIdentifier)
+                item.label = "Add"
+                item.paletteLabel = "Add"
+                item.toolTip = "Add"
+                item.image = NSImage(systemSymbolName: "plus", accessibilityDescription: "Add")
+                item.menu = makeAddMenu()
+                item.showsIndicator = false
+                item.minSize = NSSize(width: 36, height: 30)
+                item.maxSize = NSSize(width: 36, height: 30)
+                return item
+            }
+
+            let item = NSToolbarItem(itemIdentifier: addIdentifier)
+            item.label = "Add"
+            item.paletteLabel = "Add"
+            item.toolTip = "Add"
+            let button = NSButton(
+                image: NSImage(systemSymbolName: "plus", accessibilityDescription: "Add") ?? NSImage(),
+                target: self,
+                action: #selector(handleShowAddMenu(_:))
+            )
+            button.imagePosition = .imageOnly
+            button.isBordered = true
+            button.bezelStyle = .circular
+            button.setButtonType(.momentaryPushIn)
+            button.translatesAutoresizingMaskIntoConstraints = false
+            button.widthAnchor.constraint(equalToConstant: 30).isActive = true
+            button.heightAnchor.constraint(equalToConstant: 30).isActive = true
+            item.view = button
+            item.minSize = NSSize(width: 30, height: 30)
+            item.maxSize = NSSize(width: 30, height: 30)
+            return item
+        }
+
+        private func makeAddMenu() -> NSMenu {
+            let menu = NSMenu()
+            menu.autoenablesItems = false
+
+            let newLocal = NSMenuItem(title: "New Local Playlist", action: #selector(handleNewLocalPlaylist), keyEquivalent: "")
+            newLocal.target = self
+            menu.addItem(newLocal)
+
+            let addAppleMusic = NSMenuItem(title: "Add Apple Music Playlist", action: #selector(handleAddAppleMusicPlaylist), keyEquivalent: "")
+            addAppleMusic.target = self
+            menu.addItem(addAppleMusic)
+
+            let importAtmosphere = NSMenuItem(title: "Import Atmosphere", action: #selector(handleImportAtmosphere), keyEquivalent: "")
+            importAtmosphere.target = self
+            menu.addItem(importAtmosphere)
+
+            let importSoundEffect = NSMenuItem(title: "Import Sound Effect", action: #selector(handleImportSoundEffect), keyEquivalent: "")
+            importSoundEffect.target = self
+            menu.addItem(importSoundEffect)
+
+            return menu
+        }
+
+        @objc
+        private func handleOpenSettings() {
+            onOpenSettings?()
+        }
+
+        @objc
+        private func handleShowAddMenu(_ sender: Any?) {
+            guard let button = sender as? NSButton else { return }
+            let menu = makeAddMenu()
+            menu.popUp(positioning: nil, at: NSPoint(x: 0, y: -2), in: button)
+        }
+
+        @objc
+        private func handleNewLocalPlaylist() {
+            onNewLocalPlaylist?()
+        }
+
+        @objc
+        private func handleAddAppleMusicPlaylist() {
+            onAddAppleMusicPlaylist?()
+        }
+
+        @objc
+        private func handleImportAtmosphere() {
+            onImportAtmosphere?()
+        }
+
+        @objc
+        private func handleImportSoundEffect() {
+            onImportSoundEffect?()
+        }
+    }
+}
+#endif

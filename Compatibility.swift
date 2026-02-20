@@ -59,9 +59,9 @@ extension Color {
 
     static var cantusTertiarySystemFill: Color {
 #if canImport(UIKit)
-        return Color(.tertiarySystemFill)
+        return Color.white.opacity(0.14)
 #elseif canImport(AppKit)
-        return Color(nsColor: .controlBackgroundColor).opacity(0.9)
+        return Color.white.opacity(0.14)
 #else
         return Color.gray.opacity(0.18)
 #endif

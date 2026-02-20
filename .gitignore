@@ -3,18 +3,15 @@ DerivedData/
 *.xcuserstate
 *.xccheckout
 *.xcscmblueprint
-*.xcworkspace
 *.xcuserdata/
 *.moved-aside
 *.xcodeproj/xcuserdata/
-*.xcodeproj/project.xcworkspace/
 *.xcsettings
 *.xcuserdatad
 
 # Swift Package Manager
 .build/
 Packages/
-Package.resolved
 
 # CocoaPods
 Pods/

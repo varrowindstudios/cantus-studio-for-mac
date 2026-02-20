@@ -2,6 +2,9 @@ import SwiftUI
 import MusicKit
 import UniformTypeIdentifiers
 import TipKit
+#if os(macOS)
+import AppKit
+#endif
 #if canImport(UIKit)
 import UIKit
 #endif
@@ -191,8 +194,7 @@ struct PlayView: View {
     }
 
     private var interactionLayer: some View {
-        baseLayer
-            .toolbar { playToolbarContent }
+        platformConfiguredBaseLayer
             .onReceive(Self.minuteTicker) { newDate in
                 now = newDate
             }
@@ -256,11 +258,22 @@ struct PlayView: View {
             .tint(theme.color)
     }
 
+#if os(iOS)
+    private var platformConfiguredBaseLayer: some View {
+        baseLayer
+            .toolbar { playToolbarContent }
+    }
+#else
+    private var platformConfiguredBaseLayer: some View {
+        baseLayer
+    }
+#endif
+
+#if os(iOS)
     @ToolbarContentBuilder
     private var playToolbarContent: some ToolbarContent {
-#if os(iOS)
         ToolbarItemGroup(placement: .navigationBarLeading) {
-            ToolbarIconButton(systemName: "gearshape", action: { menuState.presentSettings() }, iconScale: 0.9, accessibilityLabel: "Settings")
+            ToolbarIconButton(systemName: "gearshape", action: { menuState.presentSettings() }, size: 32, hitTargetSize: 32, iconScale: 1.0, accessibilityLabel: "Settings")
         }
         ToolbarItemGroup(placement: .principal) {
             quickPlayPrincipalSearchField
@@ -268,21 +281,41 @@ struct PlayView: View {
         ToolbarItemGroup(placement: .navigationBarTrailing) {
             addPopoverButton
         }
-#else
-        ToolbarItemGroup(placement: .automatic) {
-            ToolbarIconButton(systemName: "gearshape", action: { menuState.presentSettings() }, iconScale: 0.9, accessibilityLabel: "Settings")
-        }
-        ToolbarItemGroup(placement: .principal) {
-            quickPlayPrincipalSearchField
-        }
-        ToolbarItemGroup(placement: .automatic) {
-            addPopoverButton
-        }
-#endif
     }
+#endif
 
     private var addPopoverButton: some View {
-        ToolbarIconButton(systemName: "plus", action: { showAddPopover = true }, accessibilityLabel: "Import")
+#if os(macOS)
+        Menu {
+            Button("New Local Playlist") {
+                performAddPopoverAction {
+                    menuState.presentAddPlaylist(preferredTab: .local)
+                }
+            }
+            Button("Add Apple Music Playlist") {
+                performAddPopoverAction {
+                    menuState.presentAddPlaylist(preferredTab: .appleMusic)
+                }
+            }
+            Button("Import Atmosphere") {
+                performAddPopoverAction {
+                    menuState.presentImport(initialKind: .atmosphere)
+                }
+            }
+            Button("Import Sound Effect") {
+                performAddPopoverAction {
+                    menuState.presentImport(initialKind: .sfx)
+                }
+            }
+        } label: {
+            Image(systemName: "plus")
+                .symbolRenderingMode(.monochrome)
+        }
+        .menuIndicator(.hidden)
+        .tint(.primary)
+        .accessibilityLabel("Import")
+#else
+        ToolbarIconButton(systemName: "plus", action: { showAddPopover = true }, size: 32, hitTargetSize: 32, iconScale: 1.0, accessibilityLabel: "Import")
             .popoverTip(tipForTourStep(.fastImport), arrowEdge: .bottom)
             .popover(isPresented: $showAddPopover, attachmentAnchor: .point(.bottom), arrowEdge: .top) {
                 VStack(alignment: .leading, spacing: 4) {
@@ -313,6 +346,7 @@ struct PlayView: View {
                 .frame(minWidth: 292, alignment: .leading)
                 .presentationCompactAdaptation(.popover)
             }
+#endif
     }
 
     private func performAddPopoverAction(_ action: @escaping () -> Void) {
@@ -353,24 +387,25 @@ struct PlayView: View {
     }
 
     private var quickPlayPrincipalSearchField: some View {
-        ViewThatFits(in: .horizontal) {
-            quickPlayToolbarSearchField(width: quickPlayPreferredWidth)
-            quickPlayToolbarSearchField(width: 520)
-            quickPlayToolbarSearchField(width: 440)
-            quickPlayToolbarSearchField(width: 360)
-            quickPlayToolbarSearchField(width: 300)
-            quickPlayToolbarSearchField(width: 240)
-            quickPlayToolbarSearchField(width: 200)
-            quickPlayToolbarSearchField(width: 180)
-            quickPlayToolbarSearchField(width: 160)
-            quickPlayToolbarSearchField(width: 140)
-            quickPlayToolbarSearchField(width: 120)
-        }
+        quickPlayToolbarSearchField
+            .frame(width: quickPlayPreferredWidth)
+            .frame(minWidth: 96, maxWidth: 520)
         .popoverTip(tipForTourStep(.quickPlayFast), arrowEdge: .bottom)
     }
 
-    private func quickPlayToolbarSearchField(width: CGFloat) -> some View {
-        HStack(spacing: 8) {
+    private var quickPlaySecondarySearchRow: some View {
+        HStack {
+            Spacer(minLength: 0)
+            quickPlayToolbarSearchField
+                .frame(width: quickPlaySecondaryWidth)
+            Spacer(minLength: 0)
+        }
+        .frame(maxWidth: .infinity)
+        .popoverTip(tipForTourStep(.quickPlayFast), arrowEdge: .bottom)
+    }
+
+    private var quickPlayToolbarSearchField: some View {
+        HStack(spacing: quickPlayFieldSpacing) {
             Image(systemName: "magnifyingglass")
                 .foregroundStyle(.secondary)
             QuickPlayInlineTextField(
@@ -390,8 +425,8 @@ struct PlayView: View {
                 .buttonStyle(.plain)
             }
         }
-        .padding(.horizontal, 12)
-        .frame(width: width, height: 36)
+        .padding(.horizontal, quickPlayFieldHorizontalInset)
+        .frame(height: 36)
         .cantusGlassEffectRegular(in: Capsule())
         .overlay {
             ZStack {
@@ -574,7 +609,7 @@ struct PlayView: View {
                 }
                 .padding(.bottom, 24)
             }
-            .contentMargins(.horizontal, adaptiveHorizontalPadding, for: .scrollContent)
+            .contentMargins(.horizontal, playContentHorizontalPadding, for: .scrollContent)
             .simultaneousGesture(TapGesture().onEnded {
                 if quickPlayIsPresented {
                     dismissQuickPlay()
@@ -589,6 +624,14 @@ struct PlayView: View {
                     bottomDockHeight = newValue
                 }
             }
+#if os(macOS)
+            .safeAreaInset(edge: .top) {
+                quickPlaySecondarySearchRow
+                    .padding(.horizontal, quickPlaySecondaryLayout.inset)
+                    .padding(.top, 4)
+                    .padding(.bottom, 6)
+            }
+#endif
             .safeAreaInset(edge: .bottom) {
                 bottomDock
                     .frame(width: layoutWidth > 0 ? layoutWidth : nil)
@@ -613,9 +656,12 @@ struct PlayView: View {
             .frame(maxWidth: .infinity)
             .clipped()
         }
-        .padding(.horizontal, adaptiveHorizontalPadding)
-        .padding(.bottom, 8)
+        .padding(.horizontal, playContentHorizontalPadding)
+        .padding(.bottom, bottomDockBottomPadding)
         .frame(maxWidth: contentMaxWidth)
+        .background {
+            DockBackdropEffect()
+        }
         .clipped()
         .background(
             GeometryReader { proxy in
@@ -639,21 +685,155 @@ struct PlayView: View {
         return min(base, max(8, scaled))
     }
 
+    private var playContentHorizontalPadding: CGFloat {
+#if os(macOS)
+        18
+#else
+        adaptiveHorizontalPadding
+#endif
+    }
+
+    private var bottomDockBottomPadding: CGFloat {
+#if os(macOS)
+        16
+#else
+        8
+#endif
+    }
+
     private var contentMaxWidth: CGFloat? {
         layoutWidth > 0 ? layoutWidth : nil
     }
 
     private var quickPlayPreferredWidth: CGFloat {
-        let maxWidth: CGFloat = isIpadLike ? 520 : 520
+        let maxWidth: CGFloat = 520
         guard layoutWidth > 0 else { return maxWidth }
+#if os(macOS)
+        let reserved: CGFloat
+        if layoutWidth <= 520 {
+            reserved = 300
+        } else if layoutWidth <= 700 {
+            reserved = 320
+        } else {
+            reserved = 340
+        }
+        let available = layoutWidth - (adaptiveHorizontalPadding * 2) - reserved
+        let clamped = min(maxWidth, max(96, available))
+#else
         let reserved: CGFloat = isIpadLike ? 220 : 120
         let available = layoutWidth - (adaptiveHorizontalPadding * 2) - reserved
-        let clamped = min(maxWidth, max(220, available))
-        return floor(clamped / 20) * 20
+        let clamped = min(maxWidth, max(120, available))
+#endif
+        return floor(clamped / 10) * 10
+    }
+
+    private var usesSecondaryQuickPlaySearchOnMac: Bool {
+#if os(macOS)
+        true
+#else
+        false
+#endif
+    }
+
+    private var quickPlaySecondaryMaxWidth: CGFloat {
+#if os(macOS)
+        448
+#else
+        520
+#endif
+    }
+
+    private var quickPlaySecondaryMinWidth: CGFloat {
+#if os(macOS)
+        336
+#else
+        220
+#endif
+    }
+
+    private var quickPlaySecondaryWidth: CGFloat {
+#if os(macOS)
+        quickPlaySecondaryLayout.width
+#else
+        return min(quickPlaySecondaryMaxWidth, max(quickPlaySecondaryMinWidth, quickPlayPreferredWidth))
+#endif
+    }
+
+    private var quickPlaySecondaryLayout: (width: CGFloat, inset: CGFloat) {
+#if os(macOS)
+        let minWidth = quickPlaySecondaryMinWidth
+        let maxWidth = quickPlaySecondaryMaxWidth
+        let hardMinInset: CGFloat = 24
+        let preferredInset = compactQuickPlayHorizontalInset
+        guard layoutWidth > 0 else { return (minWidth, preferredInset) }
+
+        let resolvedInset: CGFloat
+        if layoutWidth >= minWidth + (preferredInset * 2) {
+            resolvedInset = preferredInset
+        } else if layoutWidth >= minWidth + (hardMinInset * 2) {
+            resolvedInset = (layoutWidth - minWidth) / 2
+        } else {
+            resolvedInset = hardMinInset
+        }
+
+        let available = max(0, layoutWidth - (resolvedInset * 2))
+        let resolvedWidth: CGFloat
+        if available <= minWidth {
+            resolvedWidth = available
+        } else {
+            resolvedWidth = min(maxWidth, max(minWidth, available))
+        }
+        return (resolvedWidth, resolvedInset)
+#else
+        return (quickPlaySecondaryWidth, adaptiveHorizontalPadding)
+#endif
+    }
+
+    private var compactQuickPlayHorizontalInset: CGFloat {
+#if os(macOS)
+        guard layoutWidth > 0 else { return 24 }
+        if layoutWidth <= 420 { return 24 }
+        if layoutWidth <= 520 { return 26 }
+        if layoutWidth <= 700 { return 28 }
+        return min(36, max(28, layoutWidth * 0.04))
+#else
+        return adaptiveHorizontalPadding
+#endif
+    }
+
+    private var quickPlayFieldHorizontalInset: CGFloat {
+#if os(macOS)
+        if usesSecondaryQuickPlaySearchOnMac {
+            if quickPlaySecondaryWidth <= quickPlaySecondaryMinWidth + 24 { return 7 }
+            if quickPlaySecondaryWidth <= quickPlaySecondaryMinWidth + 80 { return 9 }
+            return 10
+        }
+        guard layoutWidth > 0 else { return 4 }
+        if layoutWidth <= 420 { return 1 }
+        if layoutWidth <= 520 { return 2 }
+        if layoutWidth <= 640 { return 3 }
+        if layoutWidth <= 760 { return 4 }
+        return 5
+#else
+        return 12
+#endif
+    }
+
+    private var quickPlayFieldSpacing: CGFloat {
+#if os(macOS)
+        layoutWidth > 0 && layoutWidth <= 520 ? 5 : 8
+#else
+        return 8
+#endif
     }
 
     private var quickPlayOverlayWidth: CGFloat {
-        quickPlayPreferredWidth
+#if os(macOS)
+        if usesSecondaryQuickPlaySearchOnMac {
+            return min(520, max(180, quickPlaySecondaryLayout.width))
+        }
+#endif
+        return quickPlayPreferredWidth
     }
 
     private func updateLayoutWidth(_ newValue: CGFloat) {
@@ -665,7 +845,7 @@ struct PlayView: View {
 
     private var quickBoards: some View {
         QuickBoardsView(
-            availableWidth: max(0, layoutWidth - (adaptiveHorizontalPadding * 2)),
+            availableWidth: max(0, layoutWidth - (playContentHorizontalPadding * 2)),
             order: $quickBoardOrder,
             dragging: $draggingQuickBoard,
             playlist: playlistSection,
@@ -1109,53 +1289,85 @@ struct PlayView: View {
 
     private var atmosphereListHeight: CGFloat {
         listHeight(
-            nonBookmarkedCount: nonBookmarkedAtmosphereItems.count,
-            bookmarkedCount: bookmarks.loopBookmarkList.count,
-            rowHeight: 36
+            nonBookmarkedItems: nonBookmarkedAtmosphereItems,
+            bookmarkedItems: bookmarks.loopBookmarkList
         )
     }
 
     private var sfxListHeight: CGFloat {
         listHeight(
-            nonBookmarkedCount: nonBookmarkedSFXItems.count,
-            bookmarkedCount: bookmarks.sfxBookmarkList.count,
-            rowHeight: 36
+            nonBookmarkedItems: nonBookmarkedSFXItems,
+            bookmarkedItems: bookmarks.sfxBookmarkList
         )
     }
 
     private var playlistListHeight: CGFloat {
-        playlistListHeight(
+        listHeight(
             nonBookmarkedItems: nonBookmarkedPlaylistItems,
             bookmarkedItems: bookmarks.playlistBookmarkList
         )
     }
 
-    private func listHeight(nonBookmarkedCount: Int, bookmarkedCount: Int, rowHeight: CGFloat) -> CGFloat {
-        guard nonBookmarkedCount > 0 || bookmarkedCount > 0 else { return 0 }
-        let headerRows = (nonBookmarkedCount > 0 ? 1 : 0) + (bookmarkedCount > 0 ? 1 : 0)
-        let rows = nonBookmarkedCount + bookmarkedCount + headerRows
-        let spacing: CGFloat = 6
-        let total = CGFloat(rows) * rowHeight + max(0, CGFloat(rows - 1)) * spacing + 18
-        return total
+    private var playSectionListRowSpacing: CGFloat {
+#if os(macOS)
+        2
+#else
+        6
+#endif
     }
 
-    private func playlistListHeight(nonBookmarkedItems: [String], bookmarkedItems: [String]) -> CGFloat {
+    private var playSectionListBottomInset: CGFloat {
+#if os(macOS)
+        4
+#else
+        6
+#endif
+    }
+
+    private func listHeight(nonBookmarkedItems: [String], bookmarkedItems: [String]) -> CGFloat {
         let nonBookmarkedCount = nonBookmarkedItems.count
         let bookmarkedCount = bookmarkedItems.count
         guard nonBookmarkedCount > 0 || bookmarkedCount > 0 else { return 0 }
         let headerRows = (nonBookmarkedCount > 0 ? 1 : 0) + (bookmarkedCount > 0 ? 1 : 0)
-        let rows = nonBookmarkedItems + bookmarkedItems
-        let rowHeights = rows.map { playlistRowHeight(for: $0) }
+        let rowHeights = (nonBookmarkedItems + bookmarkedItems).map(playRowHeight(for:))
         let contentHeight = rowHeights.reduce(0, +) + CGFloat(headerRows) * 36
-        let spacing: CGFloat = 6
-        let totalRows = rows.count + headerRows
-        let totalSpacing = max(0, CGFloat(totalRows - 1)) * spacing
-        return contentHeight + totalSpacing + 18
+        let totalRows = rowHeights.count + headerRows
+        let totalSpacing = max(0, CGFloat(totalRows - 1)) * playSectionListRowSpacing
+        return contentHeight + totalSpacing + playSectionListBottomInset
     }
 
-    private func playlistRowHeight(for title: String) -> CGFloat {
-        let threshold = 26
-        return title.count > threshold ? 52 : 36
+    private func playRowHeight(for title: String) -> CGFloat {
+        title.count > playRowMultilineThreshold ? 52 : 36
+    }
+
+    private var playRowMultilineThreshold: Int {
+#if os(macOS)
+        let spacing: CGFloat = 12
+        let availableWidth = max(0, layoutWidth - (playContentHorizontalPadding * 2))
+        guard availableWidth > 0 else { return 22 }
+        let columns = quickBoardColumnCount(for: availableWidth)
+        let cardWidth = (availableWidth - CGFloat(max(0, columns - 1)) * spacing) / CGFloat(max(columns, 1))
+        switch cardWidth {
+        case ..<330:
+            return 18
+        case ..<380:
+            return 22
+        case ..<440:
+            return 26
+        default:
+            return 30
+        }
+#else
+        return 26
+#endif
+    }
+
+    private func quickBoardColumnCount(for width: CGFloat) -> Int {
+        let spacing: CGFloat = 12
+        let minCardWidth: CGFloat = 340
+        let available = max(0, width)
+        let rawCount = Int((available + spacing) / (minCardWidth + spacing))
+        return min(3, max(1, rawCount))
     }
 
     private var isAppleMusicPlaylistPlaying: Bool {
@@ -1205,6 +1417,7 @@ struct PlayView: View {
             if abs(playback.masterVolume - systemVolume) > 0.0005 {
                 playback.masterVolume = systemVolume
             }
+            musicPlayback.setMasterVolume(playback.masterVolume)
             backend.audioManager.setMusicVolume(playback.musicVolume)
             musicPlayback.setMusicVolume(playback.musicVolume)
             backend.audioManager.setAtmosphereVolume(playback.atmosphereVolume)
@@ -1220,6 +1433,7 @@ struct PlayView: View {
         }
         .onChange(of: playback.masterVolume) { _, newValue in
             backend.audioManager.setMasterVolume(newValue)
+            musicPlayback.setMasterVolume(newValue)
         }
         .onChange(of: playback.musicVolume) { _, newValue in
             backend.audioManager.setMusicVolume(newValue)
@@ -1251,6 +1465,15 @@ struct PlayView: View {
         ) { result in
             handleQuickPlaySelection(result)
         }
+        .padding(.top, quickPlayResultsTopOffset)
+    }
+
+    private var quickPlayResultsTopOffset: CGFloat {
+#if os(macOS)
+        usesSecondaryQuickPlaySearchOnMac ? 52 : 6
+#else
+        6
+#endif
     }
 
     private struct QuickPlayRow: View {
@@ -1341,9 +1564,8 @@ struct PlayView: View {
                         }
                         .padding(8)
                         .cantusGlassEffectRegular(in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-                        .frame(maxWidth: maxWidth)
+                        .frame(width: maxWidth)
                         .padding(.top, 6)
-                        .padding(.horizontal, 12)
                     }
                 }
             }
@@ -1529,7 +1751,9 @@ struct PlayView: View {
                 }
             }
             .frame(maxWidth: .infinity)
-            .padding(12)
+            .padding(.top, 12)
+            .padding(.horizontal, 12)
+            .padding(.bottom, 4)
             .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
             .background(headerColor.opacity(0.4), in: RoundedRectangle(cornerRadius: 16))
             .overlay(RoundedRectangle(cornerRadius: 16).stroke(headerColor, lineWidth: 1))
@@ -1633,6 +1857,8 @@ struct PlayView: View {
                                         containsMusic: containsMusic(item),
                                         showRecent: recentNonBookmarkedSet.contains(item),
                                         recencyText: recencyText(item),
+                                        backgroundTint: .gray,
+                                        inactiveBackgroundTintOpacity: 0.16,
                                         onTap: {
                                             onToggleLoop(item)
                                         }
@@ -1685,6 +1911,8 @@ struct PlayView: View {
                                         showRecent: false,
                                         showBookmark: true,
                                         recencyText: recencyText(item),
+                                        backgroundTint: .gray,
+                                        inactiveBackgroundTintOpacity: 0.16,
                                         onTap: {
                                             onToggleLoop(item)
                                         }
@@ -1738,7 +1966,10 @@ struct PlayView: View {
                 }
             }
             .frame(maxWidth: .infinity)
-            .padding(12)
+            .padding(.top, 12)
+            .padding(.horizontal, 12)
+            .padding(.bottom, 4)
+            .background(Color.gray.opacity(0.08), in: RoundedRectangle(cornerRadius: 16))
             .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
             .overlay(RoundedRectangle(cornerRadius: 16).stroke(headerColor, lineWidth: 1))
             .animation(.easeInOut(duration: 0.25), value: showAtmospheres)
@@ -1837,6 +2068,8 @@ struct PlayView: View {
                                         infoItemId: itemIdForTitle(item),
                                         showRecent: recentNonBookmarkedSet.contains(item),
                                         recencyText: recencyText(item),
+                                        backgroundTint: .gray,
+                                        inactiveBackgroundTintOpacity: 0.16,
                                         onTap: {
                                             onToggleSFX(item)
                                         }
@@ -1888,6 +2121,8 @@ struct PlayView: View {
                                         showRecent: false,
                                         showBookmark: true,
                                         recencyText: recencyText(item),
+                                        backgroundTint: .gray,
+                                        inactiveBackgroundTintOpacity: 0.16,
                                         onTap: {
                                             onToggleSFX(item)
                                         }
@@ -1941,7 +2176,10 @@ struct PlayView: View {
                 }
             }
             .frame(maxWidth: .infinity)
-            .padding(12)
+            .padding(.top, 12)
+            .padding(.horizontal, 12)
+            .padding(.bottom, 4)
+            .background(Color.gray.opacity(0.08), in: RoundedRectangle(cornerRadius: 16))
             .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
             .overlay(RoundedRectangle(cornerRadius: 16).stroke(headerColor, lineWidth: 1))
             .animation(.easeInOut(duration: 0.25), value: showSoundEffects)
@@ -2755,20 +2993,24 @@ private struct EllipsisGlassIconButton: View {
     let action: () -> Void
     @State private var isHovered = false
     @EnvironmentObject private var theme: ThemeModel
+    private let visualSize: CGFloat = 36
+    private let tapTargetSize: CGFloat = 36
 
     var body: some View {
         Button(action: action) {
-            Image(systemName: "ellipsis")
-                .font(.title2.weight(.semibold))
-                .frame(width: 36, height: 36)
-                .scaleEffect(isHovered ? 1.15 : 1.0)
-                .foregroundStyle(theme.headerColor)
+            ZStack {
+                Circle()
+                    .fill(Color.white.opacity(isHovered ? 0.10 : 0.0))
+                Image(systemName: "ellipsis")
+                    .font(.title2.weight(.semibold))
+                    .frame(width: visualSize, height: visualSize)
+                    .scaleEffect(isHovered ? 1.15 : 1.0)
+                    .foregroundStyle(theme.headerColor)
+            }
+            .frame(width: tapTargetSize, height: tapTargetSize)
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .background(
-            Circle()
-                .fill(Color.white.opacity(isHovered ? 0.10 : 0.0))
-        )
         .onHover { hovering in
             withAnimation(.easeInOut(duration: 0.18)) {
                 isHovered = hovering
@@ -3366,15 +3608,17 @@ struct PlayRow: View {
     var showBookmark: Bool = false
     var recencyText: String? = nil
     var isDimmed: Bool = false
-    var titleLineLimit: Int? = 1
+    var titleLineLimit: Int? = 2
     var backgroundTint: Color? = nil
     var backgroundTintOpacity: Double = 0.0
+    var inactiveBackgroundTintOpacity: Double? = nil
     var onTap: (() -> Void)? = nil
     @EnvironmentObject private var theme: ThemeModel
     @State private var showInfo = false
 
     var body: some View {
-        let tint = backgroundTint?.opacity(backgroundTintOpacity) ?? .clear
+        let resolvedBackgroundTintOpacity = isPlaying ? backgroundTintOpacity : (inactiveBackgroundTintOpacity ?? backgroundTintOpacity)
+        let tint = backgroundTint?.opacity(resolvedBackgroundTintOpacity) ?? .clear
         ZStack {
             RoundedRectangle(cornerRadius: 8)
                 .fill(.ultraThinMaterial)
@@ -3436,6 +3680,7 @@ struct PlayRow: View {
             .padding(.trailing, 8)
             .padding(.vertical, 6)
         }
+        .padding(.vertical, 2)
         .contentShape(Rectangle())
         .onTapGesture { onTap?() }
         .opacity(isDimmed ? 0.55 : 1.0)
@@ -4161,6 +4406,42 @@ struct EdgeFadeOverlay: View {
     }
 }
 
+private struct DockBackdropEffect: View {
+    @EnvironmentObject private var theme: ThemeModel
+
+    var body: some View {
+        ZStack {
+            Rectangle()
+                .fill(.regularMaterial)
+                .mask(
+                    LinearGradient(
+                        stops: [
+                            .init(color: .clear, location: 0.0),
+                            .init(color: .white.opacity(0.42), location: 0.28),
+                            .init(color: .white.opacity(0.78), location: 0.62),
+                            .init(color: .white, location: 1.0)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+
+            LinearGradient(
+                stops: [
+                    .init(color: theme.indigoColor.opacity(0.0), location: 0.0),
+                    .init(color: theme.indigoColor.opacity(0.16), location: 0.30),
+                    .init(color: theme.backgroundColor.opacity(0.52), location: 0.68),
+                    .init(color: theme.backgroundColor.opacity(0.90), location: 1.0)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+        }
+        .compositingGroup()
+        .allowsHitTesting(false)
+    }
+}
+
 private struct BottomFadeOverlay: View {
     @EnvironmentObject private var theme: ThemeModel
 
@@ -4197,7 +4478,7 @@ private struct BottomFadeOverlay: View {
 
 #if !canImport(UIKit)
 // QuickPlayInlineTextFieldMacFallback
-private struct QuickPlayInlineTextField: View {
+private struct QuickPlayInlineTextField: NSViewRepresentable {
     @Binding var text: String
     @Binding var isFocused: Bool
     @Binding var isActive: Bool
@@ -4206,46 +4487,156 @@ private struct QuickPlayInlineTextField: View {
     let onReturn: () -> Void
     let onEscape: () -> Void
 
-    @FocusState private var focusedField: Bool
+    func makeCoordinator() -> Coordinator {
+        Coordinator(parent: self)
+    }
 
-    var body: some View {
-        TextField("QuickPlay", text: $text)
-            .textFieldStyle(.plain)
-            .focused($focusedField)
-            .onSubmit {
-                guard isActive else { return }
-                onReturn()
+    func makeNSView(context: Context) -> QuickPlayKeyAwareTextField {
+        let field = QuickPlayKeyAwareTextField(frame: .zero)
+        field.isBordered = false
+        field.drawsBackground = false
+        field.focusRingType = .none
+        field.font = .systemFont(ofSize: NSFont.systemFontSize)
+        field.placeholderString = "QuickPlay"
+        field.lineBreakMode = .byTruncatingTail
+        field.delegate = context.coordinator
+        field.commandHandler = { command in
+            context.coordinator.handle(command: command)
+        }
+        return field
+    }
+
+    func updateNSView(_ nsView: QuickPlayKeyAwareTextField, context: Context) {
+        context.coordinator.parent = self
+
+        if nsView.stringValue != text {
+            nsView.stringValue = text
+        }
+
+        let hasEditor = nsView.currentEditor() != nil
+        if isFocused && !hasEditor {
+            DispatchQueue.main.async {
+                nsView.window?.makeFirstResponder(nsView)
             }
-            .onMoveCommand { direction in
-                guard isActive else { return }
-                switch direction {
-                case .up:
-                    onUp()
-                case .down:
-                    onDown()
-                default:
-                    break
+        } else if !isFocused && hasEditor {
+            DispatchQueue.main.async {
+                nsView.window?.makeFirstResponder(nil)
+            }
+        }
+
+        if !isActive && hasEditor {
+            DispatchQueue.main.async {
+                nsView.window?.makeFirstResponder(nil)
+                if isFocused {
+                    isFocused = false
                 }
             }
-            .onExitCommand {
-                guard isActive else { return }
-                onEscape()
+        }
+    }
+
+    final class Coordinator: NSObject, NSTextFieldDelegate {
+        var parent: QuickPlayInlineTextField
+
+        init(parent: QuickPlayInlineTextField) {
+            self.parent = parent
+        }
+
+        func controlTextDidChange(_ notification: Notification) {
+            guard let field = notification.object as? NSTextField else { return }
+            if parent.text != field.stringValue {
+                parent.text = field.stringValue
             }
-            .onChange(of: focusedField) { _, newValue in
-                if isFocused != newValue {
-                    isFocused = newValue
-                }
+        }
+
+        func controlTextDidBeginEditing(_ notification: Notification) {
+            if !parent.isFocused {
+                parent.isFocused = true
             }
-            .onChange(of: isFocused) { _, newValue in
-                if newValue != focusedField {
-                    focusedField = newValue
-                }
+        }
+
+        func controlTextDidEndEditing(_ notification: Notification) {
+            if parent.isFocused {
+                parent.isFocused = false
             }
-            .onChange(of: isActive) { _, newValue in
-                if !newValue && focusedField {
-                    focusedField = false
-                }
+        }
+
+        func control(_ control: NSControl, textView: NSTextView, doCommandBy commandSelector: Selector) -> Bool {
+            guard parent.isActive else { return false }
+            if commandSelector == #selector(NSResponder.moveUp(_:)) {
+                parent.onUp()
+                return true
             }
+            if commandSelector == #selector(NSResponder.moveDown(_:)) {
+                parent.onDown()
+                return true
+            }
+            if commandSelector == #selector(NSResponder.insertNewline(_:)) {
+                parent.onReturn()
+                return true
+            }
+            if commandSelector == #selector(NSResponder.cancelOperation(_:)) {
+                parent.onEscape()
+                return true
+            }
+            return false
+        }
+
+        func handle(command: QuickPlayKeyAwareTextField.Command) -> Bool {
+            guard parent.isActive else { return false }
+            switch command {
+            case .up:
+                parent.onUp()
+                return true
+            case .down:
+                parent.onDown()
+                return true
+            case .enter:
+                parent.onReturn()
+                return true
+            case .escape:
+                parent.onEscape()
+                return true
+            }
+        }
+    }
+}
+
+private final class QuickPlayKeyAwareTextField: NSTextField {
+    enum Command {
+        case up
+        case down
+        case enter
+        case escape
+    }
+
+    var commandHandler: ((Command) -> Bool)?
+
+    override func keyDown(with event: NSEvent) {
+        let handled: Bool
+        switch event.keyCode {
+        case 126:
+            handled = commandHandler?(.up) ?? false
+        case 125:
+            handled = commandHandler?(.down) ?? false
+        case 36, 76:
+            handled = commandHandler?(.enter) ?? false
+        case 53:
+            handled = commandHandler?(.escape) ?? false
+        default:
+            handled = false
+        }
+        if handled {
+            return
+        }
+        super.keyDown(with: event)
+    }
+
+    override func textDidEndEditing(_ notification: Notification) {
+        super.textDidEndEditing(notification)
+        if let movement = notification.userInfo?["NSTextMovement"] as? Int,
+           movement == NSTextMovement.cancel.rawValue {
+            _ = commandHandler?(.escape)
+        }
     }
 }
 #endif
