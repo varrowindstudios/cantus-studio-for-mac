@@ -19,7 +19,6 @@ final class AppMenuState: ObservableObject {
     @Published var pendingSettingsAction: SettingsMenuAction? = nil
     @Published var quickPlayRequested = false
     @Published var replayTourRequestToken: UUID? = nil
-    @Published var showFastImportTourTip = false
 
     func closePanelsAndSheets() {
         showAbout = false

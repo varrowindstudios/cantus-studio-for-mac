@@ -1,6 +1,5 @@
 import SwiftUI
 import UniformTypeIdentifiers
-import TipKit
 #if os(macOS)
 import AppKit
 #endif
@@ -28,7 +27,6 @@ struct RootView: View {
 #if os(macOS)
                 .background(
                     MainPlayWindowToolbarConfigurator(
-                        showFastImportTourTip: menuState.showFastImportTourTip,
                         onOpenSettings: { menuState.presentSettings() },
                         onNewLocalPlaylist: { menuState.presentAddPlaylist(preferredTab: .local) },
                         onAddAppleMusicPlaylist: { menuState.presentAddPlaylist(preferredTab: .appleMusic) },
@@ -212,7 +210,6 @@ struct RootView: View {
 
 #if os(macOS)
 private struct MainPlayWindowToolbarConfigurator: NSViewRepresentable {
-    let showFastImportTourTip: Bool
     let onOpenSettings: () -> Void
     let onNewLocalPlaylist: () -> Void
     let onAddAppleMusicPlaylist: () -> Void
@@ -228,7 +225,6 @@ private struct MainPlayWindowToolbarConfigurator: NSViewRepresentable {
     }
 
     func updateNSView(_ nsView: NSView, context: Context) {
-        context.coordinator.showFastImportTourTip = showFastImportTourTip
         context.coordinator.onOpenSettings = onOpenSettings
         context.coordinator.onNewLocalPlaylist = onNewLocalPlaylist
         context.coordinator.onAddAppleMusicPlaylist = onAddAppleMusicPlaylist
@@ -246,14 +242,8 @@ private struct MainPlayWindowToolbarConfigurator: NSViewRepresentable {
         var onAddAppleMusicPlaylist: (() -> Void)?
         var onImportAtmosphere: (() -> Void)?
         var onImportSoundEffect: (() -> Void)?
-        var showFastImportTourTip = false {
-            didSet { updateFastImportTipPresentation() }
-        }
 
         private weak var attachedWindow: NSWindow?
-        private weak var addButton: NSButton?
-        private var didPresentFastImportTip = false
-        private var fastImportTipPopover: TipNSPopover?
         private let toolbarIdentifier = NSToolbar.Identifier("cantus.main.play.window.toolbar")
         private let settingsIdentifier = NSToolbarItem.Identifier("cantus.main.play.window.toolbar.settings")
         private let addIdentifier = NSToolbarItem.Identifier("cantus.main.play.window.toolbar.add")
@@ -276,8 +266,6 @@ private struct MainPlayWindowToolbarConfigurator: NSViewRepresentable {
             if window.titleVisibility != .hidden {
                 window.titleVisibility = .hidden
             }
-
-            updateFastImportTipPresentation()
         }
 
         func toolbarAllowedItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
@@ -315,10 +303,23 @@ private struct MainPlayWindowToolbarConfigurator: NSViewRepresentable {
         }
 
         private func makeAddMenuItem() -> NSToolbarItem {
+            if #available(macOS 11.0, *) {
+                let item = NSMenuToolbarItem(itemIdentifier: addIdentifier)
+                item.label = "Add"
+                item.paletteLabel = "Add"
+                item.toolTip = "Add"
+                item.image = NSImage(systemSymbolName: "plus", accessibilityDescription: "Add")
+                item.menu = makeAddMenu()
+                item.showsIndicator = false
+                item.minSize = NSSize(width: 36, height: 30)
+                item.maxSize = NSSize(width: 36, height: 30)
+                return item
+            }
+
             let item = NSToolbarItem(itemIdentifier: addIdentifier)
             item.label = "Add"
             item.paletteLabel = "Add"
-            item.toolTip = "Import"
+            item.toolTip = "Add"
             let button = NSButton(
                 image: NSImage(systemSymbolName: "plus", accessibilityDescription: "Add") ?? NSImage(),
                 target: self,
@@ -332,10 +333,8 @@ private struct MainPlayWindowToolbarConfigurator: NSViewRepresentable {
             button.widthAnchor.constraint(equalToConstant: 30).isActive = true
             button.heightAnchor.constraint(equalToConstant: 30).isActive = true
             item.view = button
-            addButton = button
             item.minSize = NSSize(width: 30, height: 30)
             item.maxSize = NSSize(width: 30, height: 30)
-            updateFastImportTipPresentation()
             return item
         }
 
@@ -370,29 +369,8 @@ private struct MainPlayWindowToolbarConfigurator: NSViewRepresentable {
         @objc
         private func handleShowAddMenu(_ sender: Any?) {
             guard let button = sender as? NSButton else { return }
-            if showFastImportTourTip {
-                fastImportTipPopover?.performClose(nil)
-                CantusToolbarFastImportTip().invalidate(reason: .actionPerformed)
-            }
             let menu = makeAddMenu()
             menu.popUp(positioning: nil, at: NSPoint(x: 0, y: -2), in: button)
-        }
-
-        private func updateFastImportTipPresentation() {
-            if !showFastImportTourTip {
-                didPresentFastImportTip = false
-                fastImportTipPopover?.performClose(nil)
-                fastImportTipPopover = nil
-                return
-            }
-
-            guard !didPresentFastImportTip else { return }
-            guard let addButton else { return }
-
-            let popover = TipNSPopover(CantusToolbarFastImportTip())
-            popover.show(relativeTo: addButton.bounds, of: addButton, preferredEdge: .minY)
-            fastImportTipPopover = popover
-            didPresentFastImportTip = true
         }
 
         @objc
@@ -415,20 +393,5 @@ private struct MainPlayWindowToolbarConfigurator: NSViewRepresentable {
             onImportSoundEffect?()
         }
     }
-}
-
-@available(iOS 18.0, *)
-private struct CantusToolbarFastImportTip: Tip {
-    private static let tourVersionKey = "cantus.playtour.version"
-    private static let tipBaseID = "cantus.playtour.fastImport"
-
-    var id: String {
-        let version = max(0, UserDefaults.standard.integer(forKey: Self.tourVersionKey))
-        return "\(Self.tipBaseID).v\(version)"
-    }
-
-    var title: Text { Text("Fast Import of New Sounds") }
-    var message: Text? { Text("Import your sound files, tag them, and add them to your library") }
-    var options: [any TipOption] { Tip.IgnoresDisplayFrequency(true) }
 }
 #endif

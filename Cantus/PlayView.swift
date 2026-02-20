@@ -48,7 +48,6 @@ private enum CantusPlayTourStep: String, CaseIterable {
             .navigateWithEase,
             .mixItUp,
             .instantDucking,
-            .fastImport,
             .quickPlayFast
         ]
 #else
@@ -581,9 +580,6 @@ struct PlayView: View {
             .onDisappear {
                 tourStepStatusTask?.cancel()
                 tourStepStatusTask = nil
-#if os(macOS)
-                menuState.showFastImportTourTip = false
-#endif
             }
     }
 
@@ -2454,9 +2450,6 @@ struct PlayView: View {
         tourStepStatusTask?.cancel()
         tourStepStatusTask = nil
         currentTourStep = step
-#if os(macOS)
-        menuState.showFastImportTourTip = isTourActive && step == .fastImport
-#endif
 
         guard isTourActive, let step else { return }
         let tip = tipInstance(for: step)
