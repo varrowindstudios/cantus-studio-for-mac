@@ -74,7 +74,9 @@ struct PremiumUpgradeView: View {
                 premiumContent
             }
         }
-        .cantusGlassBackground()
+#if os(iOS)
+        .background(.thinMaterial, in: .rect(cornerRadius: 28))
+#endif
         .task {
             await premium.refresh()
         }

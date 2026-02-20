@@ -38,6 +38,23 @@ private enum CantusPlayTourStep: String, CaseIterable {
     case quickPlayFast = "cantus.playtour.quickPlayFast"
 
     var tipID: String { "\(rawValue).v\(CantusPlayTourState.currentVersion())" }
+
+    static var orderedSteps: [CantusPlayTourStep] {
+#if os(macOS)
+        [
+            .controlIt,
+            .fastAccessTags,
+            .bookmarksAndRecents,
+            .navigateWithEase,
+            .mixItUp,
+            .instantDucking,
+            .fastImport,
+            .quickPlayFast
+        ]
+#else
+        allCases
+#endif
+    }
 }
 
 @available(iOS 18.0, *)
@@ -401,7 +418,7 @@ struct PlayView: View {
             Spacer(minLength: 0)
         }
         .frame(maxWidth: .infinity)
-        .popoverTip(tipForTourStep(.quickPlayFast), arrowEdge: .bottom)
+        .popoverTip(tipForTourStep(.quickPlayFast), arrowEdge: .top)
     }
 
     private var quickPlayToolbarSearchField: some View {
@@ -564,6 +581,9 @@ struct PlayView: View {
             .onDisappear {
                 tourStepStatusTask?.cancel()
                 tourStepStatusTask = nil
+#if os(macOS)
+                menuState.showFastImportTourTip = false
+#endif
             }
     }
 
@@ -2434,6 +2454,9 @@ struct PlayView: View {
         tourStepStatusTask?.cancel()
         tourStepStatusTask = nil
         currentTourStep = step
+#if os(macOS)
+        menuState.showFastImportTourTip = isTourActive && step == .fastImport
+#endif
 
         guard isTourActive, let step else { return }
         let tip = tipInstance(for: step)
@@ -2464,10 +2487,11 @@ struct PlayView: View {
 
     private func advanceTour(from step: CantusPlayTourStep) {
         guard isTourActive, currentTourStep == step else { return }
-        guard let index = CantusPlayTourStep.allCases.firstIndex(of: step) else { return }
+        let steps = CantusPlayTourStep.orderedSteps
+        guard let index = steps.firstIndex(of: step) else { return }
         let nextIndex = index + 1
-        if CantusPlayTourStep.allCases.indices.contains(nextIndex) {
-            setTourStep(CantusPlayTourStep.allCases[nextIndex])
+        if steps.indices.contains(nextIndex) {
+            setTourStep(steps[nextIndex])
         } else {
             finishTour()
         }
@@ -2502,7 +2526,8 @@ struct PlayView: View {
         showTourCompletionSplash = false
         isTourActive = true
         lastTourManualInvalidateAt = .distantPast
-        setTourStep(.controlIt)
+        guard let firstStep = CantusPlayTourStep.orderedSteps.first else { return }
+        setTourStep(firstStep)
     }
 
 }
@@ -3218,28 +3243,39 @@ struct NowPlayingDock: View {
     }
 
     private var playbackControls: some View {
-        ZStack {
+        let controlTapTarget: CGFloat = 32
+
+        return ZStack {
             HStack(spacing: 28) {
                 Button(action: { Task { await musicPlayback.previous() } }) {
                     Image(systemName: "backward.end.fill")
                         .font(.title3)
+                        .frame(width: controlTapTarget, height: controlTapTarget)
+                        .contentShape(Rectangle())
                 }
                 Button(action: { Task { await musicPlayback.togglePlayPause() } }) {
                     Image(systemName: musicPlayback.isPlaying ? "pause.fill" : "play.fill")
                         .font(.title2)
+                        .frame(width: controlTapTarget, height: controlTapTarget)
+                        .contentShape(Rectangle())
                 }
                 .popoverTip(controlsTip, arrowEdge: .top)
                 Button(action: { Task { await musicPlayback.next() } }) {
                     Image(systemName: "forward.end.fill")
                         .font(.title3)
+                        .frame(width: controlTapTarget, height: controlTapTarget)
+                        .contentShape(Rectangle())
                 }
                 Button(action: { musicPlayback.cyclePlaylistPlaybackMode() }) {
                     Image(systemName: musicPlayback.playlistPlaybackMode.iconName)
                         .font(.title3)
+                        .frame(width: controlTapTarget, height: controlTapTarget)
+                        .contentShape(Rectangle())
                 }
-                .foregroundStyle(theme.color)
                 .accessibilityLabel(musicPlayback.playlistPlaybackMode.accessibilityLabel)
             }
+            .foregroundStyle(theme.color)
+            .buttonStyle(.plain)
 
             HStack {
                 Spacer()
