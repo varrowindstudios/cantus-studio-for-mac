@@ -1,12 +1,16 @@
 import SwiftUI
 import UniformTypeIdentifiers
 import Foundation
+#if os(macOS)
+import AppKit
+#endif
 #if canImport(UIKit)
 import UIKit
 #endif
 
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.openURL) private var openURL
     @EnvironmentObject private var theme: ThemeModel
     @EnvironmentObject private var backend: AppBackend
     @EnvironmentObject private var bookmarks: BookmarksStore
@@ -25,11 +29,17 @@ struct SettingsView: View {
     @State private var exportError: String?
     @State private var showExportOptions = false
     @State private var showThemePicker = false
+    @State private var showThemePickerDestination = false
+#if os(iOS)
     @State private var showIconPicker = false
+#endif
     @State private var importError: String?
     @State private var importSuccessMessage: String?
     @State private var showPremiumUpgrade: Bool
+    @State private var showPremiumUpgradeDestination = false
+    @State private var showPremiumDetailsDestination = false
     @State private var showPremiumDetails = false
+    @State private var showSubscriptionManagementError = false
     private let showPremiumOnAppear: Bool
 
     init(showPremiumOnAppear: Bool = false) {
@@ -41,14 +51,14 @@ struct SettingsView: View {
         mainView
 #if os(iOS)
         .background(.thinMaterial, in: .rect(cornerRadius: 28))
-#endif
         .sheet(isPresented: $showPremiumUpgrade) {
             PremiumUpgradeView()
                 .environmentObject(premium)
                 .environmentObject(theme)
         }
         .sheet(isPresented: $showPremiumDetails) {
-            PremiumSubscribedView()
+            PremiumUpgradeView(mode: .subscribed)
+                .environmentObject(premium)
                 .environmentObject(theme)
         }
         .sheet(isPresented: $showThemePicker) {
@@ -61,6 +71,7 @@ struct SettingsView: View {
                 .environmentObject(theme)
                 .environmentObject(premium)
         }
+#endif
         .fileImporter(
             isPresented: $showImportPicker,
             allowedContentTypes: [.zip],
@@ -94,17 +105,22 @@ struct SettingsView: View {
         } message: {
             Text(importSuccessMessage ?? "")
         }
+        .alert("Unable to Open Subscriptions", isPresented: $showSubscriptionManagementError) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("Please open the App Store and manage your subscription there.")
+        }
+#if os(iOS)
         .confirmationDialog("Export Library", isPresented: $showExportOptions) {
-            ForEach(LibraryExportScope.allCases) { scope in
-                Button(scope.label) {
-                    startExport(scope: scope)
-                }
-            }
+            Button("Everything") { startExport(scope: .everything) }
+            Button("Playlists") { startExport(scope: .playlists) }
+            Button("Atmospheres") { startExport(scope: .atmospheres) }
+            Button("Sound Effects") { startExport(scope: .soundEffects) }
             Button("Cancel", role: .cancel) {}
-                .foregroundStyle(theme.headerColor)
         } message: {
             Text("Choose what you want to export.")
         }
+#endif
         .overlay {
             if isExporting {
                 ZStack {
@@ -129,6 +145,9 @@ private extension SettingsView {
     var mainView: some View {
         NavigationStack {
             List {
+#if os(macOS)
+                settingsHeader
+#endif
                 premiumSection
                 manageLibrarySection
                 lookAndFeelSection
@@ -143,7 +162,12 @@ private extension SettingsView {
             .hoverEffectDisabled(true)
             #endif
             .scrollContentBackground(.hidden)
+#if os(iOS)
             .navigationTitle("Settings")
+#else
+            .navigationTitle("")
+            .toolbar(removing: .title)
+#endif
             .toolbar {
 #if os(iOS)
                 ToolbarItem(placement: .cancellationAction) {
@@ -161,7 +185,7 @@ private extension SettingsView {
             .onAppear {
                 Task { await premium.refresh() }
                 if showPremiumOnAppear {
-                    showPremiumUpgrade = true
+                    presentPremiumUpgrade()
                 }
             }
             .task(id: menuState.pendingSettingsAction) {
@@ -171,7 +195,11 @@ private extension SettingsView {
                 case .importLibrary:
                     showImportPicker = true
                 case .exportLibrary:
+#if os(macOS)
+                    presentExportScopeDialog()
+#else
                     showExportOptions = true
+#endif
                 }
             }
             .navigationDestination(isPresented: $showExportInfoNav) {
@@ -179,123 +207,232 @@ private extension SettingsView {
                     summary: exportSummary,
                     fileSizeBytes: exportSizeBytes,
                     fileBaseName: $exportBaseName,
-                    onCancel: { showExportInfoNav = false },
-                    onExportResult: { result in
-                        if case .failure = result {
-                            exportError = "Failed to export library."
-                        }
-                    }
+                    onCancel: { showExportInfoNav = false }
                 ) { baseName in
                     exportBaseName = sanitizedExportBaseName(baseName)
                     showExportInfoNav = false
                     showExportPicker = true
                 }
             }
+            .navigationDestination(isPresented: $showPremiumUpgradeDestination) {
+                PremiumUpgradeView(
+                    embedInNavigationStack: false,
+                    showsCloseButton: false
+                )
+                .navigationBarBackButtonHidden(false)
+            }
+            .navigationDestination(isPresented: $showPremiumDetailsDestination) {
+                PremiumUpgradeView(
+                    mode: .subscribed,
+                    embedInNavigationStack: false,
+                    showsCloseButton: false
+                )
+                .navigationBarBackButtonHidden(false)
+            }
+            .navigationDestination(isPresented: $showThemePickerDestination) {
+                ThemePickerView(
+                    embedInNavigationStack: false,
+                    showsCloseButton: false
+                )
+                .environmentObject(theme)
+                .environmentObject(premium)
+                .navigationBarBackButtonHidden(false)
+            }
         }
     }
 }
 
 private extension SettingsView {
+    var settingsCardHorizontalInset: CGFloat { 10 }
+
+    var settingsHeader: some View {
+        VStack(spacing: 10) {
+            Image(systemName: "gearshape.fill")
+                .font(.system(size: 44, weight: .semibold))
+                .foregroundStyle(theme.headerColor)
+            Text("Settings")
+                .font(.system(.largeTitle, design: .rounded).weight(.bold))
+                .foregroundStyle(.primary)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.top, 4)
+        .padding(.bottom, 8)
+        .listRowInsets(EdgeInsets(
+            top: 10,
+            leading: settingsCardHorizontalInset,
+            bottom: 10,
+            trailing: settingsCardHorizontalInset
+        ))
+        .listRowBackground(Color.clear)
+        .listRowSeparator(.hidden)
+    }
+
+    func settingsSectionHeader(_ title: String) -> some View {
+        Text(title)
+            .font(.subheadline)
+            .foregroundStyle(.secondary)
+            .textCase(nil)
+            .padding(.leading, settingsCardHorizontalInset)
+            .padding(.bottom, 2)
+    }
+
+    var settingsCardSeparator: some View {
+        Rectangle()
+            .fill(.primary.opacity(0.12))
+            .frame(height: 0.5)
+            .padding(.leading, 42)
+    }
+
+    func settingsCardActionRow(
+        title: String,
+        systemImage: String,
+        iconColor: Color,
+        action: @escaping () -> Void
+    ) -> some View {
+        Button(action: action) {
+            HStack(alignment: .center, spacing: 12) {
+                Image(systemName: systemImage)
+                    .frame(width: 20)
+                    .foregroundStyle(iconColor)
+                Text(title)
+                    .font(.body)
+                    .foregroundStyle(.primary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .padding(.horizontal, 10)
+            .padding(.vertical, 8)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+
+    func settingsCardGroup<Content: View>(
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        VStack(spacing: 0) {
+            content()
+        }
+        .background(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .fill(.thinMaterial)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .stroke(.primary.opacity(0.08), lineWidth: 0.5)
+        )
+        .listRowInsets(EdgeInsets(
+            top: 1,
+            leading: settingsCardHorizontalInset,
+            bottom: 1,
+            trailing: settingsCardHorizontalInset
+        ))
+        .listRowBackground(Color.clear)
+        .listRowSeparator(.hidden)
+    }
+
     var manageLibrarySection: some View {
         Section(
-            header: Text("Manage Library")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+            header: settingsSectionHeader("Manage Library")
         ) {
-            Button(action: { showImportPicker = true }) {
-                Label {
-                    Text("Import Sound Library")
-                } icon: {
-                    Image(systemName: "tray.and.arrow.down")
-                        .foregroundStyle(theme.headerColor)
+            settingsCardGroup {
+                settingsCardActionRow(
+                    title: "Import Sound Library",
+                    systemImage: "tray.and.arrow.down",
+                    iconColor: theme.headerColor
+                ) {
+                    showImportPicker = true
                 }
-                .font(.body)
-            }
-            Button {
-                showExportOptions = true
-            } label: {
-                Label {
-                    Text("Export Sound Library")
-                } icon: {
-                    Image(systemName: "archivebox")
-                        .foregroundStyle(theme.headerColor)
+                settingsCardSeparator
+                settingsCardActionRow(
+                    title: "Export Sound Library",
+                    systemImage: "archivebox",
+                    iconColor: theme.headerColor
+                ) {
+#if os(macOS)
+                    presentExportScopeDialog()
+#else
+                    showExportOptions = true
+#endif
                 }
-                .font(.body)
             }
         }
-        .listRowBackground(Rectangle().fill(.thinMaterial))
+        .listSectionSeparator(.hidden, edges: .all)
     }
 
     var lookAndFeelSection: some View {
         Section(
-            header: Text("Look & Feel")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+            header: settingsSectionHeader("Look & Feel")
         ) {
-            Button(action: { showIconPicker = true }) {
-                Label {
-                    Text("App Icon")
-                } icon: {
-                    Image(systemName: "app.badge")
-                        .foregroundStyle(theme.headerColor)
+            settingsCardGroup {
+#if os(iOS)
+                settingsCardActionRow(
+                    title: "App Icon",
+                    systemImage: "app.badge",
+                    iconColor: theme.headerColor
+                ) {
+                    presentIconPicker()
                 }
-                .font(.body)
-            }
-            Button(action: { showThemePicker = true }) {
-                Label {
-                    Text("App Theme")
-                } icon: {
-                    Image(systemName: "paintpalette")
-                        .foregroundStyle(theme.headerColor)
+                settingsCardSeparator
+#endif
+                settingsCardActionRow(
+                    title: "App Theme",
+                    systemImage: "paintpalette",
+                    iconColor: theme.headerColor
+                ) {
+                    presentThemePicker()
                 }
-                .font(.body)
             }
         }
-        .listRowBackground(Rectangle().fill(.thinMaterial))
+        .listSectionSeparator(.hidden, edges: .all)
     }
 
     var premiumSection: some View {
         Section(
-            header: Text("Cantus Premium")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+            header: settingsSectionHeader("Cantus Premium")
         ) {
-            Button {
+            settingsCardGroup {
+                settingsCardActionRow(
+                    title: premium.isPremium ? "Subscribed to Premium" : "Upgrade to Premium",
+                    systemImage: premium.isPremium ? "checkmark.seal.fill" : "sparkles",
+                    iconColor: premium.isPremium ? theme.confirmIconColor : theme.headerColor
+                ) {
+                    if premium.isPremium {
+                        presentPremiumDetails()
+                    } else {
+                        presentPremiumUpgrade()
+                    }
+                }
                 if premium.isPremium {
-                    showPremiumDetails = true
-                } else {
-                    showPremiumUpgrade = true
+                    settingsCardSeparator
+                    settingsCardActionRow(
+                        title: "Unsubscribe from Premium",
+                        systemImage: "minus.circle",
+                        iconColor: .red
+                    ) {
+                        openSubscriptionManagement()
+                    }
                 }
-            } label: {
-                Label {
-                    Text(premium.isPremium ? "Subscribed to Premium" : "Upgrade to Premium")
-                } icon: {
-                    Image(systemName: premium.isPremium ? "checkmark.seal.fill" : "sparkles")
-                        .foregroundStyle(premium.isPremium ? theme.confirmIconColor : theme.headerColor)
-                }
-                .font(.body)
             }
         }
-        .listRowBackground(Rectangle().fill(.thinMaterial))
+        .listSectionSeparator(.hidden, edges: .all)
     }
 
     var helpSection: some View {
         Section(
-            header: Text("Help")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+            header: settingsSectionHeader("Help")
         ) {
-            Button(action: triggerTourReplay) {
-                Label {
-                    Text("Forgot how to do something? Take the Cantus tour again.")
-                } icon: {
-                    Image(systemName: "questionmark.circle")
-                        .foregroundStyle(theme.headerColor)
+            settingsCardGroup {
+                settingsCardActionRow(
+                    title: "Forgot how to do something? Take the Cantus tour again.",
+                    systemImage: "questionmark.circle",
+                    iconColor: theme.headerColor
+                ) {
+                    triggerTourReplay()
                 }
-                .font(.body)
             }
         }
-        .listRowBackground(Rectangle().fill(.thinMaterial))
+        .listSectionSeparator(.hidden, edges: .all)
     }
 
     func defaultExportBaseName(timestampToken: String, scope: LibraryExportScope) -> String {
@@ -404,6 +541,46 @@ private extension SettingsView {
         }
     }
 
+#if os(macOS)
+    @MainActor
+    func presentExportScopeDialog() {
+        let alert = NSAlert()
+        alert.messageText = "Export Library"
+        alert.informativeText = "Choose what you want to export."
+        alert.alertStyle = .informational
+        alert.addButton(withTitle: "Everything")
+        alert.addButton(withTitle: "Playlists")
+        alert.addButton(withTitle: "Atmospheres")
+        alert.addButton(withTitle: "Sound Effects")
+        alert.addButton(withTitle: "Cancel")
+        alert.buttons.last?.keyEquivalent = "\u{1b}"
+
+        if let window = NSApp.keyWindow {
+            alert.beginSheetModal(for: window) { response in
+                handleExportScopeResponse(response)
+            }
+        } else {
+            handleExportScopeResponse(alert.runModal())
+        }
+    }
+
+    @MainActor
+    func handleExportScopeResponse(_ response: NSApplication.ModalResponse) {
+        switch response {
+        case .alertFirstButtonReturn:
+            startExport(scope: .everything)
+        case .alertSecondButtonReturn:
+            startExport(scope: .playlists)
+        case .alertThirdButtonReturn:
+            startExport(scope: .atmospheres)
+        case NSApplication.ModalResponse(rawValue: 1003):
+            startExport(scope: .soundEffects)
+        default:
+            break
+        }
+    }
+#endif
+
     func triggerTourReplay() {
         dismiss()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
@@ -411,56 +588,48 @@ private extension SettingsView {
         }
     }
 
-}
+    func presentPremiumUpgrade() {
+#if os(macOS)
+        showPremiumUpgradeDestination = true
+#else
+        showPremiumUpgrade = true
+#endif
+    }
 
-private struct PremiumSubscribedView: View {
-    @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject private var theme: ThemeModel
+    func presentPremiumDetails() {
+#if os(macOS)
+        showPremiumDetailsDestination = true
+#else
+        showPremiumDetails = true
+#endif
+    }
 
-    var body: some View {
-        NavigationStack {
-            List {
-                Section {
-                    Label {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("You are subscribed to Premium")
-                                .font(.headline)
-                            Text("Thanks for supporting Cantus.")
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
-                        }
-                    } icon: {
-                        Image(systemName: "checkmark.seal.fill")
-                            .foregroundStyle(theme.confirmIconColor)
-                    }
-                    .padding(.vertical, 4)
-                }
+    func presentThemePicker() {
+#if os(macOS)
+        showThemePickerDestination = true
+#else
+        showThemePicker = true
+#endif
+    }
 
-                Section("The Premium Experience Includes…") {
-                    PremiumFeaturesCardView()
-                        .listRowBackground(Color.clear)
-                        .listRowSeparator(.hidden)
-                }
-            }
-            #if os(iOS)
-            .listStyle(.insetGrouped)
-            #endif
-            .navigationTitle("Cantus Premium")
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    if #available(iOS 18.0, *) {
-                        ToolbarIconButton(systemName: "xmark", action: { dismiss() }, accessibilityLabel: "Close")
-                    } else {
-                        Button(action: { dismiss() }) {
-                            Image(systemName: "xmark")
-                        }
-                        .accessibilityLabel("Close")
-                    }
-                }
+    #if os(iOS)
+    func presentIconPicker() {
+        showIconPicker = true
+    }
+    #endif
+
+    func openSubscriptionManagement() {
+        guard let manageURL = URL(string: "https://apps.apple.com/account/subscriptions") else {
+            showSubscriptionManagementError = true
+            return
+        }
+        openURL(manageURL) { accepted in
+            if !accepted {
+                showSubscriptionManagementError = true
             }
         }
-        .cantusGlassBackground()
     }
+
 }
 
 private struct ExportBundleDocument: FileDocument {
@@ -486,84 +655,203 @@ private struct ExportInfoView: View {
     let fileSizeBytes: Int64
     @Binding var fileBaseName: String
     let onCancel: () -> Void
-    let onExportResult: (Result<URL, Error>) -> Void
     let onRequestExport: (String) -> Void
     @EnvironmentObject private var theme: ThemeModel
+
+    private var cardHorizontalInset: CGFloat { 10 }
+
+    private var trimmedFileBaseName: String {
+        fileBaseName.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    private var isSaveDisabled: Bool {
+        trimmedFileBaseName.isEmpty
+    }
+
+    private var detailRows: [(label: String, value: String)] {
+        guard let summary else { return [] }
+        return [
+            ("Scope", summary.scope.label),
+            ("Filesize", ByteCountFormatter.string(fromByteCount: fileSizeBytes, countStyle: .file)),
+            ("Playlists", "\(summary.playlistItemCount)"),
+            ("Atmospheres", "\(summary.atmosphereCount)"),
+            ("Sound Effects", "\(summary.sfxCount)"),
+            ("Assets", "\(summary.assetCount)"),
+            ("Tags", "\(summary.tagCount) tags")
+        ]
+    }
+
     var body: some View {
         NavigationStack {
-            Form {
-                Section("Filename") {
-                    TextField(
-                        "",
-                        text: $fileBaseName,
-                        prompt: Text("Cantus_Export_YYYYMMDD")
-                            .foregroundStyle(theme.confirmIconColor)
-                    )
-                    #if os(iOS)
-                    .textInputAutocapitalization(.never)
-                    .disableAutocorrection(true)
-                    #endif
+            List {
+                Text("Export Library to .ZIP")
+                    .font(.system(.largeTitle, design: .rounded).weight(.bold))
                     .foregroundStyle(.primary)
-                    .onChange(of: fileBaseName) { _, newValue in
-                        let trimmed = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
-                        if trimmed.lowercased().hasSuffix(".zip") {
-                            fileBaseName = String(trimmed.dropLast(4))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.top, 4)
+                    .padding(.bottom, 6)
+                    .listRowInsets(EdgeInsets(
+                        top: 8,
+                        leading: cardHorizontalInset,
+                        bottom: 2,
+                        trailing: cardHorizontalInset
+                    ))
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
+
+                sectionLabel("Filename")
+
+                TextField(
+                    "",
+                    text: $fileBaseName,
+                    prompt: Text("Cantus_Export_YYYYMMDD")
+                        .foregroundStyle(.secondary)
+                )
+                #if os(iOS)
+                .textInputAutocapitalization(.never)
+                .disableAutocorrection(true)
+                #endif
+                .font(.title3.weight(.medium))
+                .foregroundStyle(.primary)
+                .padding(.horizontal, 18)
+                .padding(.vertical, 14)
+                .background(
+                    RoundedRectangle(cornerRadius: 26, style: .continuous)
+                        .fill(Color.black.opacity(0.55))
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 26, style: .continuous)
+                        .stroke(.white.opacity(0.08), lineWidth: 0.5)
+                )
+                .onChange(of: fileBaseName) { _, newValue in
+                    let trimmed = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
+                    if trimmed.lowercased().hasSuffix(".zip") {
+                        fileBaseName = String(trimmed.dropLast(4))
+                    }
+                }
+                .listRowInsets(EdgeInsets(
+                    top: 2,
+                    leading: cardHorizontalInset,
+                    bottom: 12,
+                    trailing: cardHorizontalInset
+                ))
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+
+                sectionLabel("Details")
+
+                if detailRows.isEmpty {
+                    Text("Exporting details…")
+                        .font(.headline)
+                        .foregroundStyle(theme.headerColor)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 18)
+                        .background(
+                            RoundedRectangle(cornerRadius: 24, style: .continuous)
+                                .fill(.thinMaterial)
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 24, style: .continuous)
+                                .stroke(.white.opacity(0.08), lineWidth: 0.5)
+                        )
+                        .listRowInsets(EdgeInsets(
+                            top: 2,
+                            leading: cardHorizontalInset,
+                            bottom: 2,
+                            trailing: cardHorizontalInset
+                        ))
+                        .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden)
+                } else {
+                    VStack(spacing: 0) {
+                        ForEach(Array(detailRows.enumerated()), id: \.offset) { index, row in
+                            HStack(alignment: .center, spacing: 12) {
+                                Text(row.label)
+                                    .font(.title3.weight(.medium))
+                                    .foregroundStyle(.primary)
+                                Spacer()
+                                Text(row.value)
+                                    .font(.title3.weight(.regular))
+                                    .foregroundStyle(.secondary)
+                            }
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 14)
+
+                            if index < detailRows.count - 1 {
+                                Rectangle()
+                                    .fill(.primary.opacity(0.14))
+                                    .frame(height: 0.5)
+                                    .padding(.horizontal, 16)
+                            }
                         }
                     }
-
-                }
-                .listRowBackground(Color(.sRGB, red: 17.0 / 255.0, green: 17.0 / 255.0, blue: 17.0 / 255.0, opacity: 1.0))
-
-                Section("Details") {
-                    if let summary {
-                        LabeledContent("Scope", value: summary.scope.label)
-                        LabeledContent("Filesize", value: ByteCountFormatter.string(fromByteCount: fileSizeBytes, countStyle: .file))
-                        LabeledContent("Playlists", value: "\(summary.playlistItemCount)")
-                        LabeledContent("Atmospheres", value: "\(summary.atmosphereCount)")
-                        LabeledContent("Sound Effects", value: "\(summary.sfxCount)")
-                        LabeledContent("Assets", value: "\(summary.assetCount)")
-                        LabeledContent("Tags", value: "\(summary.tagCount) tags")
-                    } else {
-                        Text("Exporting details…")
-                            .foregroundStyle(theme.headerColor)
-                    }
+                    .background(
+                        RoundedRectangle(cornerRadius: 26, style: .continuous)
+                            .fill(.thinMaterial)
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius: 26, style: .continuous))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 26, style: .continuous)
+                            .stroke(.white.opacity(0.08), lineWidth: 0.5)
+                    )
+                    .listRowInsets(EdgeInsets(
+                        top: 2,
+                        leading: cardHorizontalInset,
+                        bottom: 2,
+                        trailing: cardHorizontalInset
+                    ))
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
                 }
             }
-            .navigationTitle("Export Library to .ZIP")
+            .scrollContentBackground(.hidden)
+            .navigationTitle("Export")
+#if os(iOS)
             .navigationBarBackButtonHidden(true)
+#else
+            .navigationBarBackButtonHidden(false)
+#endif
             .toolbar {
+#if os(iOS)
                 ToolbarItem(placement: .cancellationAction) {
-                    if #available(iOS 18.0, *) {
-                        ToolbarIconButton(systemName: "xmark", action: onCancel, accessibilityLabel: "Cancel")
-                    } else {
-                        Button(action: onCancel) {
-                            Image(systemName: "xmark")
-                        }
-                        .accessibilityLabel("Cancel")
-                        .foregroundStyle(theme.headerColor)
+                    Button(action: onCancel) {
+                        Image(systemName: "chevron.left")
                     }
+                    .accessibilityLabel("Back")
+                    .foregroundStyle(theme.headerColor)
                 }
+#endif
+
                 ToolbarItem(placement: .confirmationAction) {
-                    let action = {
-                        let trimmed = fileBaseName.trimmingCharacters(in: .whitespacesAndNewlines)
-                        guard !trimmed.isEmpty else {
-                            onExportResult(.failure(CocoaError(.fileWriteInvalidFileName)))
-                            return
-                        }
-                        onRequestExport(trimmed)
+                    Button(action: {
+                        guard !isSaveDisabled else { return }
+                        onRequestExport(trimmedFileBaseName)
+                    }) {
+                        Image(systemName: "checkmark")
                     }
-                    if #available(iOS 18.0, *) {
-                        ToolbarIconButton(systemName: "checkmark", action: action, accessibilityLabel: "Save")
-                    } else {
-                        Button(action: action) {
-                            Image(systemName: "checkmark")
-                        }
-                        .accessibilityLabel("Save")
-                        .foregroundStyle(theme.confirmIconColor)
-                    }
+                    .accessibilityLabel("Save")
+                    .foregroundStyle(theme.confirmIconColor)
+                    .disabled(isSaveDisabled)
                 }
             }
         }
+    }
+
+    private func sectionLabel(_ text: String) -> some View {
+        Text(text)
+            .font(.title3.weight(.semibold))
+            .foregroundStyle(.secondary)
+            .textCase(nil)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .listRowInsets(EdgeInsets(
+                top: 2,
+                leading: cardHorizontalInset + 4,
+                bottom: 2,
+                trailing: cardHorizontalInset
+            ))
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
     }
 }
 
@@ -572,60 +860,135 @@ private struct ThemePickerView: View {
     @EnvironmentObject private var theme: ThemeModel
     @EnvironmentObject private var premium: PremiumStore
     @State private var showPremiumUpgrade = false
+    @State private var showPremiumUpgradeDestination = false
+    private let embedInNavigationStack: Bool
+    private let showsCloseButton: Bool
+
+    init(embedInNavigationStack: Bool = true, showsCloseButton: Bool = true) {
+        self.embedInNavigationStack = embedInNavigationStack
+        self.showsCloseButton = showsCloseButton
+    }
+    private var cardHorizontalInset: CGFloat { 10 }
 
     var body: some View {
-        NavigationStack {
-            List {
-                Section("Available Themes") {
-                    ForEach(CantusThemePalette.all) { palette in
-                        Button(action: {
-                            if palette.id == CantusThemePalette.neon.id || premium.isPremium {
-                                theme.selectPalette(palette)
-                            } else {
-                                showPremiumUpgrade = true
-                            }
-                        }) {
-                            HStack(spacing: 12) {
-                                Text(palette.name)
-                                    .font(.headline)
-                                Spacer()
-                                if isLocked(palette) {
-                                    Text("Premium")
-                                        .font(.caption2.weight(.semibold))
-                                        .padding(.horizontal, 8)
-                                        .padding(.vertical, 4)
-                                        .background(
-                                            Capsule().fill(theme.headerColor.opacity(0.18))
-                                        )
-                                        .foregroundStyle(theme.headerColor)
-                                }
-                                ThemePreviewThumbnail(palette: palette)
-                                if theme.palette.id == palette.id {
-                                    Image(systemName: "checkmark.circle.fill")
-                                        .foregroundStyle(theme.confirmIconColor)
-                                }
-                            }
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .contentShape(Rectangle())
-                        }
-                        .buttonStyle(.plain)
-                        .opacity(themeRowOpacity(for: palette))
-                    }
+        Group {
+            if embedInNavigationStack {
+                NavigationStack {
+                    themeContent
                 }
-            }
-            .navigationTitle("App Theme")
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    ToolbarIconButton(systemName: "xmark", action: { dismiss() }, accessibilityLabel: "Close")
-                }
+            } else {
+                themeContent
             }
         }
+#if os(iOS)
         .background(.thinMaterial, in: .rect(cornerRadius: 28))
         .sheet(isPresented: $showPremiumUpgrade) {
             PremiumUpgradeView()
                 .environmentObject(premium)
                 .environmentObject(theme)
         }
+#endif
+    }
+
+    private var themeContent: some View {
+        List {
+            themeCardGroup {
+                ForEach(Array(CantusThemePalette.all.enumerated()), id: \.element.id) { index, palette in
+                    themeOptionRow(palette)
+                    if index < CantusThemePalette.all.count - 1 {
+                        themeCardSeparator
+                    }
+                }
+            }
+            .listSectionSeparator(.hidden, edges: .all)
+        }
+        .navigationTitle("App Theme")
+        .toolbar {
+            if showsCloseButton {
+                ToolbarItem(placement: .cancellationAction) {
+                    ToolbarIconButton(systemName: "xmark", action: { dismiss() }, accessibilityLabel: "Close")
+                }
+            }
+        }
+        .navigationDestination(isPresented: $showPremiumUpgradeDestination) {
+            PremiumUpgradeView(
+                embedInNavigationStack: false,
+                showsCloseButton: false
+            )
+            .environmentObject(premium)
+            .environmentObject(theme)
+            .navigationBarBackButtonHidden(false)
+        }
+        .scrollContentBackground(.hidden)
+    }
+
+    private var themeCardSeparator: some View {
+        Rectangle()
+            .fill(.primary.opacity(0.12))
+            .frame(height: 0.5)
+    }
+
+    private func themeCardGroup<Content: View>(
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        VStack(spacing: 0) {
+            content()
+        }
+        .background(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .fill(.thinMaterial)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .stroke(.primary.opacity(0.08), lineWidth: 0.5)
+        )
+        .listRowInsets(EdgeInsets(
+            top: 1,
+            leading: cardHorizontalInset,
+            bottom: 1,
+            trailing: cardHorizontalInset
+        ))
+        .listRowBackground(Color.clear)
+        .listRowSeparator(.hidden)
+    }
+
+    private func themeOptionRow(_ palette: CantusThemePalette) -> some View {
+        Button(action: {
+            if palette.id == CantusThemePalette.neon.id || premium.isPremium {
+                theme.selectPalette(palette)
+            } else {
+                presentPremiumUpgrade()
+            }
+        }) {
+            HStack(alignment: .center, spacing: 12) {
+                Text(palette.name)
+                    .font(.headline)
+                Spacer()
+                if isLocked(palette) {
+                    Text("Premium")
+                        .font(.caption2.weight(.semibold))
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(
+                            Capsule().fill(theme.headerColor.opacity(0.18))
+                        )
+                        .foregroundStyle(theme.headerColor)
+                }
+                ThemePreviewThumbnail(palette: palette)
+                if theme.palette.id == palette.id {
+                    Image(systemName: "checkmark.circle.fill")
+                        .frame(width: 18, alignment: .center)
+                        .foregroundStyle(theme.confirmIconColor)
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 8)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .opacity(themeRowOpacity(for: palette))
     }
 
     private func themeRowOpacity(for palette: CantusThemePalette) -> Double {
@@ -638,6 +1001,14 @@ private struct ThemePickerView: View {
     private func isLocked(_ palette: CantusThemePalette) -> Bool {
         !(palette.id == CantusThemePalette.neon.id || premium.isPremium)
     }
+
+    private func presentPremiumUpgrade() {
+#if os(macOS)
+        showPremiumUpgradeDestination = true
+#else
+        showPremiumUpgrade = true
+#endif
+    }
 }
 
 private struct ThemePreviewThumbnail: View {
@@ -645,108 +1016,141 @@ private struct ThemePreviewThumbnail: View {
 
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 8, style: .continuous)
+            RoundedRectangle(cornerRadius: 7, style: .continuous)
                 .fill(palette.background)
-            VStack(spacing: 6) {
-                RoundedRectangle(cornerRadius: 4, style: .continuous)
+            VStack(spacing: 5) {
+                RoundedRectangle(cornerRadius: 3.5, style: .continuous)
                     .fill(palette.indigo.opacity(0.9))
-                    .frame(height: 10)
-                HStack(spacing: 6) {
-                    RoundedRectangle(cornerRadius: 4, style: .continuous)
+                    .frame(height: 8)
+                HStack(spacing: 5) {
+                    RoundedRectangle(cornerRadius: 3.5, style: .continuous)
                         .fill(palette.accentPrimary)
-                        .frame(width: 18, height: 18)
-                    RoundedRectangle(cornerRadius: 4, style: .continuous)
+                        .frame(width: 14, height: 14)
+                    RoundedRectangle(cornerRadius: 3.5, style: .continuous)
                         .fill(palette.accentSecondary)
-                        .frame(width: 18, height: 18)
+                        .frame(width: 14, height: 14)
                 }
-                RoundedRectangle(cornerRadius: 4, style: .continuous)
+                RoundedRectangle(cornerRadius: 3.5, style: .continuous)
                     .fill(palette.background.opacity(0.6))
-                    .frame(height: 6)
+                    .frame(height: 5)
             }
-            .padding(6)
+            .padding(5)
         }
-        .frame(width: 58, height: 46)
+        .frame(width: 48, height: 38, alignment: .center)
+        .padding(.vertical, 2)
         .overlay(
-            RoundedRectangle(cornerRadius: 8, style: .continuous)
+            RoundedRectangle(cornerRadius: 7, style: .continuous)
                 .stroke(Color.white.opacity(0.12), lineWidth: 1)
         )
     }
 }
 
+#if os(iOS)
 private struct AppIconPickerView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var theme: ThemeModel
     @EnvironmentObject private var premium: PremiumStore
     @State private var showPremiumUpgrade = false
+    @State private var showPremiumUpgradeDestination = false
     @State private var currentIconName: String?
     @State private var iconError: String?
     @State private var supportsAlternateIcons = false
+    private let embedInNavigationStack: Bool
+    private let showsCloseButton: Bool
+
+    init(embedInNavigationStack: Bool = true, showsCloseButton: Bool = true) {
+        self.embedInNavigationStack = embedInNavigationStack
+        self.showsCloseButton = showsCloseButton
+    }
 
     var body: some View {
-        NavigationStack {
-            List {
-                Section("App Icons") {
-                    ForEach(appIconOptions) { option in
-                        Button(action: {
-                            if option.isDefault || premium.isPremium {
-                                Task {
-                                    do {
-                                        try await AppIconManager.setAlternateIconName(option.alternateName)
-                                        currentIconName = AppIconManager.currentAlternateName()
-                                    } catch {
-                                        iconError = error.localizedDescription.isEmpty
-                                        ? "Unable to change app icon."
-                                        : error.localizedDescription
-                                    }
-                                }
-                            } else {
-                                showPremiumUpgrade = true
-                            }
-                        }) {
-                            HStack(spacing: 12) {
-                                Text(option.name)
-                                    .font(.headline)
-                                Spacer()
-                                if isLocked(option) {
-                                    Text("Premium")
-                                        .font(.caption2.weight(.semibold))
-                                        .padding(.horizontal, 8)
-                                        .padding(.vertical, 4)
-                                        .background(
-                                            Capsule().fill(theme.headerColor.opacity(0.18))
-                                        )
-                                        .foregroundStyle(theme.headerColor)
-                                }
-                                AppIconPreviewPair(
-                                    lightName: option.previewLightName,
-                                    darkName: option.previewDarkName,
-                                    isDefault: option.isDefault
-                                )
-                                if isSelected(option) {
-                                    Image(systemName: "checkmark.circle.fill")
-                                        .foregroundStyle(theme.confirmIconColor)
-                                }
-                            }
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .contentShape(Rectangle())
-                        }
-                        .buttonStyle(.plain)
-                        .opacity(iconRowOpacity(for: option))
-                    }
+        Group {
+            if embedInNavigationStack {
+                NavigationStack {
+                    iconContent
                 }
-            }
-            .navigationTitle("App Icon")
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    ToolbarIconButton(systemName: "xmark", action: { dismiss() }, accessibilityLabel: "Close")
-                }
+            } else {
+                iconContent
             }
         }
+#if os(iOS)
         .background(.thinMaterial, in: .rect(cornerRadius: 28))
         .sheet(isPresented: $showPremiumUpgrade) {
             PremiumUpgradeView()
                 .environmentObject(premium)
                 .environmentObject(theme)
+        }
+#endif
+    }
+
+    private var iconContent: some View {
+        List {
+            Section("App Icons") {
+                ForEach(appIconOptions) { option in
+                    Button(action: {
+                        if option.isDefault || premium.isPremium {
+                            Task {
+                                do {
+                                    try await AppIconManager.setAlternateIconName(option.alternateName)
+                                    currentIconName = AppIconManager.currentAlternateName()
+                                } catch {
+                                    iconError = error.localizedDescription.isEmpty
+                                    ? "Unable to change app icon."
+                                    : error.localizedDescription
+                                }
+                            }
+                        } else {
+                            presentPremiumUpgrade()
+                        }
+                    }) {
+                        HStack(spacing: 12) {
+                            Text(option.name)
+                                .font(.headline)
+                            Spacer()
+                            if isLocked(option) {
+                                Text("Premium")
+                                    .font(.caption2.weight(.semibold))
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 4)
+                                    .background(
+                                        Capsule().fill(theme.headerColor.opacity(0.18))
+                                    )
+                                    .foregroundStyle(theme.headerColor)
+                            }
+                            AppIconPreviewPair(
+                                lightName: option.previewLightName,
+                                darkName: option.previewDarkName,
+                                isDefault: option.isDefault
+                            )
+                            if isSelected(option) {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundStyle(theme.confirmIconColor)
+                            }
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                    .opacity(iconRowOpacity(for: option))
+                }
+            }
+        }
+        .navigationTitle("App Icon")
+        .toolbar {
+            if showsCloseButton {
+                ToolbarItem(placement: .cancellationAction) {
+                    ToolbarIconButton(systemName: "xmark", action: { dismiss() }, accessibilityLabel: "Close")
+                }
+            }
+        }
+        .navigationDestination(isPresented: $showPremiumUpgradeDestination) {
+            PremiumUpgradeView(
+                embedInNavigationStack: false,
+                showsCloseButton: false
+            )
+            .environmentObject(premium)
+            .environmentObject(theme)
+            .navigationBarBackButtonHidden(false)
         }
         .alert("Icon Error", isPresented: Binding(get: { iconError != nil }, set: { _ in iconError = nil })) {
             Button("OK", role: .cancel) {}
@@ -821,7 +1225,16 @@ private struct AppIconPickerView: View {
         }
         return currentIconName == option.alternateName
     }
+
+    private func presentPremiumUpgrade() {
+#if os(macOS)
+        showPremiumUpgradeDestination = true
+#else
+        showPremiumUpgrade = true
+#endif
+    }
 }
+#endif
 
 private struct AppIconOption: Identifiable {
     let id: String
